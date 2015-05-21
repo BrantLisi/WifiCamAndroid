@@ -1,0 +1,11 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/engineerMode"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:checkable="true"
+        android:checked="false"
+        android:title="Engineer Mode"/>
+
+</menu>

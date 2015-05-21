@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#000000</color>
+    <color name="header_color">#121212</color>
+    <color name="header_line">#242424</color>
+    <color name="white">#ffffff</color>
+    <color name="grey">#282828</color>
+    <color name="bg_color">#555555</color>
+    <color name="hint_color">#909090</color>
+    <color name="line_color">#959595</color>
+</resources>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+    
+    <TextView
+        android:id="@+id/browserTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_margin="10dp"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        android:text="@string/label_file_browser"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textStyle="bold" />
+
+    <ListView
+        android:id="@+id/browserList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_below="@+id/browserTitle"
+        android:layout_above="@+id/buttonArea"
+        android:background="@drawable/group_background"
+        android:orientation="vertical" >
+    </ListView>
+
+    <LinearLayout
+        android:id="@+id/buttonArea"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="center" 
+        style="?android:attr/buttonBarStyle" >
+
+        <Button
+            android:id="@+id/browserOpenButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_open"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/browserDeleteButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_delete"
+            android:layout_weight="1" />
+</LinearLayout>
+</RelativeLayout>

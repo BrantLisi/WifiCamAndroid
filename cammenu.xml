@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<camera xmlns="urn:schemas-ait-dvr:device-1-0">
+	<version>0.1</version>
+	<menu title="VIDEO RESOLUTION">
+		<item id="4K15">4Kx2K 15fps</item>
+		<item id="2.7K30">2.7K 30fps</item>
+		<item id="1080P60">FHD 60fps</item>
+		<item id="1080P30">FHD 30fps</item>
+		<item id="720P120">HD 120fps</item>
+		<item id="720P100">HD 100fps</item>
+	</menu>
+	<menu title="CAPTURE RESOLUTION">
+		<item id="8MP">8M Pixels</item>
+		<item id="6MPW">6M Wide Pixels</item>
+		<item id="6MP">6M Pixels</item>
+	</menu>
+	<menu title="BURST">
+		<item id="3_1sec">3/1sec</item>
+		<item id="5_1sec">5/1sec</item>
+		<item id="10_1sec">10/1sec</item>
+	</menu>
+	<menu title="TIME LAPSE">
+		<item id="5sec">5 sec</item>
+		<item id="10sec">10 sec</item>
+		<item id="30sec">30 sec</item>
+		<item id="60sec">60 sec</item>
+		<item id="5sec">5 sec</item>
+	</menu>
+	<menu title="LOOPING VIDEO">
+		<item id="OFF">Off</item>
+		<item id="300sec">5 min</item>
+		<item id="600sec">10 min</item>
+	</menu>
+	<menu title="WHITE BALANCE">
+		<item id="AUTO">Auto</item>
+		<item id="3000K">3000K</item>
+		<item id="5500K">5500K</item>
+		<item id="6500K">6500K</item>
+	</menu>
+	<menu title="HDR">
+		<item id="OFF">Off</item>
+		<item id="ON">On</item>
+	</menu>
+</camera>
