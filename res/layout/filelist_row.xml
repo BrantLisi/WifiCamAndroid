@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:background="@color/black" >
 
     <ImageView
         android:id="@+id/fileListThumbnail"
@@ -41,7 +42,8 @@
             android:ellipsize="end"
             android:singleLine="true"
             android:text="This is File Name"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/white" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -58,7 +60,8 @@
                 android:ellipsize="end"
                 android:singleLine="true"
                 android:text="This is Date-Time"
-                android:textAppearance="?android:attr/textAppearanceSmall" />
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/white" />
 
             <TextView
                 android:id="@+id/fileListSize"
@@ -72,7 +75,8 @@
                 android:gravity="right"
                 android:singleLine="true"
                 android:text="1024.99M"
-                android:textAppearance="?android:attr/textAppearanceSmall" />
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/white" />
         </LinearLayout>
     </LinearLayout>
 

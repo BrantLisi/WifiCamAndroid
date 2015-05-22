@@ -54,9 +54,7 @@ public class GetRTPS_AV1 extends AsyncTask<URL, Integer, String> {
 					new DialogInterface.OnClickListener() {
 
 						public void onClick(DialogInterface dialog, int id) {
-
 							dialog.dismiss();
-
 						}
 					});
 			alertDialog.show();
@@ -91,11 +89,8 @@ public class GetRTPS_AV1 extends AsyncTask<URL, Integer, String> {
 			} catch (Exception e) {/* not match, for firmware of MJPEG only */
 			}
 		}
-		Log.i("liveStreamUrl", " liveStreamUrl: " + liveStreamUrl);
-		WifiCamFragment fragment = StreamPlayerFragment
-				.newInstance(liveStreamUrl);
-
-		// MainActivity.addFragment(FunctionListFragment.this, fragment) ;
+		Log.i("GetRTPS_AV1", " liveStreamUrl: " + liveStreamUrl);
+		
 		super.onPostExecute(result);
 	}
 }

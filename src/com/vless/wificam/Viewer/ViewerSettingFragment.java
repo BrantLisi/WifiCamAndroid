@@ -123,7 +123,7 @@ public class ViewerSettingFragment extends WifiCamFragment {
 				} else if (h264.isChecked()) {
 				
 					mMediaUrl = "rtsp://" + gateway + url.getText().toString() ;
-					WifiCamFragment fragment = StreamPlayerFragment.newInstance(mMediaUrl) ;
+//					WifiCamFragment fragment = StreamPlayerFragment.newInstance(mMediaUrl) ;
 					Toast.makeText(getActivity(), " StreamPlayer ok ", Toast.LENGTH_SHORT).show();
 //					MainActivity.addFragment(ViewerSettingFragment.this, fragment) ;
 				}

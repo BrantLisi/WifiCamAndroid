@@ -1178,20 +1178,20 @@ public class MjpegPlayerFragment extends Fragment {
 		}) ;
 */
 
-		Button findCameraButton = (Button) view.findViewById(R.id.findCameraButton) ;
-
-		findCameraButton.setOnClickListener(new Button.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-
-				URL url = CameraCommand.commandFindCameraUrl() ;
-
-				if (url != null) {
-					new CameraCommand.SendRequest().execute(url) ;
-				}
-			}
-		}) ;
+//		Button findCameraButton = (Button) view.findViewById(R.id.findCameraButton) ;
+//
+//		findCameraButton.setOnClickListener(new Button.OnClickListener() {
+//
+//			@Override
+//			public void onClick(View v) {
+//
+//				URL url = CameraCommand.commandFindCameraUrl() ;
+//
+//				if (url != null) {
+//					new CameraCommand.SendRequest().execute(url) ;
+//				}
+//			}
+//		}) ;
 
 		 cameraRecordButton = (Button) view.findViewById(R.id.cameraRecordButton) ;
 		final Button cameraSnapshotButton = (Button) view.findViewById(R.id.cameraSnapshotButton) ;

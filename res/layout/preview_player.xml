@@ -1,89 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black"
     android:baselineAligned="false"
-    android:background="#000000"
     android:orientation="vertical" >
 
-    <FrameLayout
-        android:id="@+id/player_frame"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_above="@+id/buttonLayout" >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1" >
 
         <FrameLayout
             android:id="@+id/player_surface_frame"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_gravity="center" >
 
             <SurfaceView
                 android:id="@+id/player_surface"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center" />
-        </FrameLayout>
-    </FrameLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:orientation="vertical" >
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
-
-            <Button
-                android:id="@+id/findCameraButton"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="4"
-                android:text="@string/label_find_camera" />
-
-            <Button
-                android:id="@+id/cameraRecordButton"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="4"
-                android:text="@string/label_camera_record" />
-            
-            <Button
-                android:id="@+id/cameraSnapshotButton"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="4"
-                android:text="@string/label_camera_snapshot" />
-        </LinearLayout>
-      
-    	<LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
-    			<TextView
+            <TextView
                 android:id="@+id/TimeStampLabel"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dip"
                 android:text=""
-                android:textColor="#ffff00"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-    	</LinearLayout>	
-    	
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="#ffff00" />
+
+            <ImageView
+                android:id="@+id/iv_pause"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_pause"
+                android:visibility="invisible" />
+        </FrameLayout>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:orientation="vertical" >
+        android:layout_weight="1"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal" >
 
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" >
+        <ImageView
+            android:id="@+id/cameraSnapshotButton"
+            android:layout_width="140sp"
+            android:layout_height="140sp"
+            android:layout_gravity="center"
+            android:layout_margin="10sp"
+            android:src="@drawable/takphoto" />
 
-        </LinearLayout>
+        <ImageView
+            android:layout_width="15sp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:src="@drawable/line_clip" />
+
+        <ImageView
+            android:id="@+id/cameraRecordButton"
+            android:layout_width="140sp"
+            android:layout_height="140sp"
+            android:layout_gravity="center"
+            android:layout_margin="10sp"
+            android:src="@drawable/record" />
     </LinearLayout>
 
-</RelativeLayout>
+</LinearLayout>

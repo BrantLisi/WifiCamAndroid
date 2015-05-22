@@ -54,7 +54,7 @@ public class BrowserSettingFragment extends WifiCamFragment {
 				String urlString = path.getText().toString() ;
 				String dirString = directory.getText().toString() ;
 				
-				WifiCamFragment fragment = FileBrowserFragment.newInstance(ipString, urlString, dirString) ;
+//				WifiCamFragment fragment = FileBrowserFragment.newInstance(ipString, urlString, dirString) ;
 				
 //				MainActivity.addFragment(BrowserSettingFragment.this, fragment) ;
 				
