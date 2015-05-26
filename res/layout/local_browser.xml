@@ -18,7 +18,7 @@
         android:textColor="@color/white"
         android:textStyle="bold" />
 
-    <ListView
+   <!--  <ListView
         android:id="@+id/browserList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -28,7 +28,19 @@
         android:dividerHeight="1px"
         android:footerDividersEnabled="true"
         android:orientation="vertical" >
-    </ListView>
+    </ListView> -->
+
+    <com.baoyz.swipemenulistview.SwipeMenuListView
+        android:id="@id/browserList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/buttonArea"
+        android:layout_below="@+id/browserTitle"
+        android:divider="@color/white"
+        android:dividerHeight="1px"
+        android:footerDividersEnabled="true"
+        android:orientation="vertical" >
+    </com.baoyz.swipemenulistview.SwipeMenuListView>
 
     <LinearLayout
         android:id="@+id/buttonArea"

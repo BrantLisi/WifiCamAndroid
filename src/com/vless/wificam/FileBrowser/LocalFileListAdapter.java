@@ -86,7 +86,7 @@ public class LocalFileListAdapter extends BaseAdapter {
 			options.inDither = false;
 			options.inScaled = false;
 
-			BitmapFactory.decodeFile(mViewTag.mFileNode.mName, options);
+			BitmapFactory.decodeFile(mViewTag.getmFileNode().mName, options);
 
 			int imageHeight = options.outHeight;
 			int imageWidth = options.outWidth;
@@ -117,13 +117,13 @@ public class LocalFileListAdapter extends BaseAdapter {
 					/ imageWidth);
 
 			Bitmap originalBitmap = BitmapFactory.decodeFile(
-					mViewTag.mFileNode.mName, options);
+					mViewTag.getmFileNode().mName, options);
 
 			if (originalBitmap == null) {
 
 				try {
 					byte[] data = Util.getLibVlcInstance().getThumbnail(
-							"file://" + mViewTag.mFileNode.mName,
+							"file://" + mViewTag.getmFileNode().mName,
 							requestedWidth, requestedHeight);
 					if (data != null) {
 
@@ -154,7 +154,7 @@ public class LocalFileListAdapter extends BaseAdapter {
 		@Override
 		protected void onPostExecute(Bitmap thumbnail) {
 			if (thumbnail != null) {
-				mViewTag.mThumbnail.setImageBitmap(thumbnail);
+				mViewTag.getmThumbnail().setImageBitmap(thumbnail);
 			}
 			thumbnailTaskList.remove(this);
 			mViewTag.mThumbnailTask = null;
@@ -195,17 +195,17 @@ public class LocalFileListAdapter extends BaseAdapter {
 			}
 		}
 
-		viewTag.mFileNode = mFileList.get(position);
-		String filename = viewTag.mFileNode.mName
-				.substring(viewTag.mFileNode.mName.lastIndexOf("/") + 1);
-		viewTag.mFilename.setText(filename);
-		viewTag.mTime.setText(viewTag.mFileNode.mTime);
-		viewTag.setSize(viewTag.mFileNode.mSize);
-		if (viewTag.mFileNode.mFormat == Format.mov ||
-			viewTag.mFileNode.mFormat == Format.avi) {
-			viewTag.mThumbnail.setImageResource(R.drawable.type_all); // for temporary, it should be type_video
+		viewTag.setmFileNode(mFileList.get(position));
+		String filename = viewTag.getmFileNode().mName
+				.substring(viewTag.getmFileNode().mName.lastIndexOf("/") + 1);
+		viewTag.getmFilename().setText(filename);
+		viewTag.getmTime().setText(viewTag.getmFileNode().mTime);
+		viewTag.setSize(viewTag.getmFileNode().mSize);
+		if (viewTag.getmFileNode().mFormat == Format.mov ||
+			viewTag.getmFileNode().mFormat == Format.avi) {
+			viewTag.getmThumbnail().setImageResource(R.drawable.type_all); // for temporary, it should be type_video
 		} else {
-			viewTag.mThumbnail.setImageResource(R.drawable.type_all); // for temporary, it should be type_photo
+			viewTag.getmThumbnail().setImageResource(R.drawable.type_all); // for temporary, it should be type_photo
 		}
 		viewTag.mThumbnailTask = new ExtractThumbnail();
 		// viewTag.mThumbnailTask.execute(viewTag) ;

@@ -729,7 +729,7 @@ public class FileBrowserFragment extends WifiCamFragment {
 				ViewTag viewTag = (ViewTag) view.getTag();
 				if (viewTag != null) {
 
-					FileNode file = viewTag.mFileNode;
+					FileNode file = viewTag.getmFileNode();
 
 					CheckedTextView checkBox = (CheckedTextView) view
 							.findViewById(R.id.fileListCheckBox);

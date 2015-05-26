@@ -48,7 +48,7 @@ public class FileListAdapter extends BaseAdapter {
 		ViewTag viewTag ;
 
 		if (convertView == null) {
-			convertView = mInflater.inflate(R.layout.filelist_row, null) ;
+			convertView = mInflater.inflate(R.layout.filelist_row, parent,false) ;
 
 			viewTag = new ViewTag((ImageView) convertView.findViewById(R.id.fileListThumbnail),
 					(TextView) convertView.findViewById(R.id.fileListName),
@@ -63,14 +63,14 @@ public class FileListAdapter extends BaseAdapter {
 			viewTag = (ViewTag) convertView.getTag() ;
 		}
 
-		viewTag.mFileNode = mFileList.get(position) ;
-		String filename = viewTag.mFileNode.mName.substring(viewTag.mFileNode.mName.lastIndexOf("/") + 1) ;
-		viewTag.mFilename.setText(filename) ;
-		viewTag.mTime.setText(viewTag.mFileNode.mTime) ;
-		viewTag.setSize(viewTag.mFileNode.mSize) ;
-		viewTag.mCheckBox.setChecked(viewTag.mFileNode.mSelected) ;
+		viewTag.setmFileNode(mFileList.get(position));
+		String filename = viewTag.getmFileNode().mName.substring(viewTag.getmFileNode().mName.lastIndexOf("/") + 1) ;
+		viewTag.getmFilename().setText(filename) ;
+		viewTag.getmTime().setText(viewTag.getmFileNode().mTime) ;
+		viewTag.setSize(viewTag.getmFileNode().mSize) ;
+		viewTag.getmCheckBox().setChecked(viewTag.getmFileNode().mSelected) ;
 
 		return convertView ;
 	}
-
+	
 }
