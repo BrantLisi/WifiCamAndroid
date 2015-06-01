@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <resources>
+
     <string name="app_name">WiFi记录仪</string>
     <string name="label_file_browser">档案浏览</string>
     <string name="label_camera_control">相机控制</string>
-    <string name="label_network_configurations">连线设定</string>
-    <string name="label_camera_settings">相机设定</string>
-    <string name="label_video_resolution">影像解析度</string>
+    <string name="label_network_configurations">Wifi设置</string>
+    <string name="label_camera_settings">相机设置</string>
+    <string name="label_video_resolution">清晰度</string>
     <string name="label_image_resolution">照片解析度</string>
     <string name="label_motion_detection">移动侦测</string>
+    <string name="label_record_voice">声  音</string>
     <string name="label_on">开</string>
     <string name="label_off">关</string>
     <string name="label_flicker_frequency">闪烁频率</string>
@@ -24,10 +26,10 @@
     <string name="label_ip_camera_preview">相机预览</string>
     <string name="label_ip_camera_browser">相机档案浏览</string>
     <string name="label_local_album">手机相本</string>
-    <string name="label_wifi_ssid">WiFi SSID</string>
-    <string name="label_encryption_key">密码</string>
+    <string name="label_wifi_ssid">SSID:</string>
+    <string name="label_encryption_key">密码:</string>
     <string name="label_update">更新</string>
-    <string name="label_re_activate_network">重新启动连线</string>
+    <string name="label_re_activate_network">WIFI复位</string>
     <string name="label_find_camera">寻找相机</string>
     <string name="label_title">名称</string>
     <string name="label_time0">0:00</string>
@@ -62,22 +64,6 @@
     <string name="label_items">项目</string>
     <string name="message_save_video">影像档案将储存在手机SD卡目录</string>
     <string name="message_start_recording">开始录影</string>
-    <string name="label_language_TChinese">繁體中文</string>
-    <string name="label_language_SChinese">简体中文</string>
-    <string name="label_language_Russian">Русский</string>
-    <string name="label_language_Spanish">español</string>
-    <string name="label_language_Portuguese">português</string>
-    <string name="label_language_French">français</string>
-    <string name="label_language_Italian">italiano</string>
-    <string name="label_language_Germany">Deutsch</string>
-    <string name="label_language_Czech">čeština</string>
-    <string name="label_language_Japanese">日本語</string>
-    <string name="label_language_Korean">한국의</string>
-    <string name="label_language_Latvian">Latvijas</string>
-    <string name="label_language_Polish">polski</string>
-    <string name="label_language_Romanian">român</string>
-    <string name="label_language_Slovak">slovenský</string>
-    <string name="label_language_Ukrainian">Український</string>
     <string name="app_Version">应用程序版本</string>
     <string name="FW_Version">軟件版本</string>
     <string name="label_delete_files">刪除档案</string>
@@ -100,4 +86,27 @@
     <string name="dialog_DHCP_error">请检查DHCP设定</string>
     <string name="Timesettings">时间设置</string>
     <string name="SyncDevice">与装置同步</string>
+
+    <!-- end title -->
+    <string name="end_title_recordcard">记录仪SD卡</string>
+    <string name="end_title_localfile">手机本地</string>
+    <string name="end_title_setting">设置</string>
+    <string name="end_title_setting_wifi">WI-FI 设置</string>
+    <string name="end_title_setting_face">界面设置</string>
+
+    <!-- definition -->
+    <string name="definition_high"> 高 清 </string>
+    <string name="definition_midle"> 超 清 </string>
+    <string name="definition_low"> 流 畅 </string>
+
+    <!-- motify WIFI SSID -->
+    <string name="mod_wifi_ssid">修改WIFI SSID</string>
+       <string name="mod_wifi_pw">修改WIFI密码</string>
+    <string name="regist_ok">确认</string>
+    <string name="regist_cancel">取消</string>
+      <string name="set_ssid_old">旧 SSID</string>
+    <string name="set_ssid_new">新 SSID</string>
+    <string name="set_passwd_old">旧密码：</string>
+    <string name="set_passwd_new">新密码：</string>
+    
 </resources>

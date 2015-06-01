@@ -23,6 +23,7 @@
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginRight="5dp"
+        android:visibility="gone"
         android:checkMark="?android:attr/listChoiceIndicatorMultiple" />
 
     <LinearLayout

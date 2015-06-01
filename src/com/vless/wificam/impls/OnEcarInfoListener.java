@@ -8,5 +8,5 @@ package com.vless.wificam.impls;
  * 
  */
 public interface OnEcarInfoListener {
-	void setOnEcarInfoListener(String msg);
+	void setOnEcarInfoListener(int what);
 }

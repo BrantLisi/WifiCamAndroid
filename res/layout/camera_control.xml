@@ -2,70 +2,68 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/black"
     android:orientation="vertical" >
 
-    <ScrollView
-        android:id="@+id/functionListScrollView"
+    <include
+        android:id="@+id/frag_header"
+        layout="@layout/header" />
+
+    <LinearLayout
+        android:id="@+id/cameraControlNetworkConfigurations"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="25dp"
-        android:layout_marginLeft="25dp"
-        android:layout_marginRight="25dp"
-        android:layout_marginTop="25dp" >
+        android:layout_height="60sp"
+        android:layout_marginBottom="15dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/group_background" >
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:orientation="vertical" >
+        <TextView
+            android:id="@+id/cameraControlNetworkConfigurationsTitle"
+            android:layout_width="0sp"
+            android:layout_height="30sp"
+            android:layout_gravity="center"
+            android:layout_weight="4"
+            android:gravity="center|left"
+            android:paddingLeft="10sp"
+            android:text="@string/label_network_configurations"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/white" />
 
-            <TextView
-                android:id="@+id/cameraControlTitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
-                android:layout_marginTop="15dp"
-                android:gravity="center"
-                android:text="@string/label_camera_control"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textStyle="bold" />
+        <ImageView
+            android:id="@id/cameraControlNetworkConfigurations"
+            android:layout_width="0sp"
+            android:layout_height="30sp"
+            android:layout_gravity="center|right"
+            android:layout_weight="1"
+            android:src="@drawable/right_in" />
+    </LinearLayout>
 
-            <RelativeLayout
-                android:id="@+id/cameraControlNetworkConfigurations"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
-                android:layout_marginTop="15dp"
-                android:background="@drawable/group_background"
-                android:padding="10dip" >
+    <LinearLayout
+        android:id="@+id/cameraControlCameraSettings"
+        android:layout_width="match_parent"
+        android:layout_height="60sp"
+        android:background="@drawable/group_background" >
 
-                <TextView
-                    android:id="@+id/cameraControlNetworkConfigurationsTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="10dp"
-                    android:text="@string/label_network_configurations"
-                    android:textAppearance="?android:attr/textAppearanceLarge" />
-            </RelativeLayout>
+        <TextView
+            android:id="@+id/functionListPreviewTitle"
+            android:layout_width="0sp"
+            android:layout_height="30sp"
+            android:layout_gravity="center"
+            android:layout_weight="4"
+            android:gravity="center|left"
+            android:paddingLeft="10sp"
+            android:text="@string/label_camera_settings"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
 
-            <RelativeLayout
-                android:id="@+id/cameraControlCameraSettings"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
-                android:layout_marginTop="15dp"
-                android:background="@drawable/group_background"
-                android:padding="10dip" >
-
-                <TextView
-                    android:id="@+id/functionListPreviewTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="10dp"
-                    android:text="@string/label_camera_settings"
-                    android:textAppearance="?android:attr/textAppearanceLarge" />
-            </RelativeLayout>
-        </LinearLayout>
-    </ScrollView>
+        <ImageView
+            android:id="@id/cameraControlCameraSettings"
+            android:layout_width="0sp"
+            android:layout_height="30sp"
+            android:layout_gravity="center|right"
+            android:layout_weight="1"
+            android:src="@drawable/right_in" />
+    </LinearLayout>
 
 </LinearLayout>

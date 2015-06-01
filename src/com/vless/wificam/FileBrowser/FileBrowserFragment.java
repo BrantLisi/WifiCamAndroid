@@ -12,6 +12,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
+import com.baoyz.swipemenulistview.SwipeMenu;
+import com.baoyz.swipemenulistview.SwipeMenuCreator;
+import com.baoyz.swipemenulistview.SwipeMenuItem;
+import com.baoyz.swipemenulistview.SwipeMenuListView;
+import com.baoyz.swipemenulistview.SwipeMenuListView.OnMenuItemClickListener;
 import com.vless.wificam.R;
 import com.vless.wificam.CameraCommand;
 import com.vless.wificam.CameraPeeker;
@@ -32,6 +37,8 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.DhcpInfo;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
@@ -40,6 +47,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -47,6 +55,7 @@ import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
 import android.widget.CheckedTextView;
 import android.widget.ListView;
@@ -117,14 +126,8 @@ public class FileBrowserFragment extends WifiCamFragment {
 					mFileListAdapter.notifyDataSetChanged();
 
 					if (!result.isCompleted() && fileList.size() != 0) {
-						mFileListTitle.setText(mFileBrowser + " : " + mReading
-								+ " " + mDirectory + " (" + sFileList.size()
-								+ " " + mItems + ")");
 						new ContiunedDownloadTask().execute(result);
 					} else {
-						mFileListTitle.setText(mFileBrowser + " : "
-								+ mDirectory + " (" + sFileList.size() + " "
-								+ mItems + ")");
 						setWaitingState(false);
 					}
 				}
@@ -140,12 +143,7 @@ public class FileBrowserFragment extends WifiCamFragment {
 			mFileListAdapter.notifyDataSetChanged();
 
 			sSelectedFiles.clear();
-			mSaveButton.setEnabled(false);
-			mOpenButton.setEnabled(false);
-			mDeleteButton.setEnabled(false);
 			mfrom = 0;
-			mFileListTitle.setText(mFileBrowser + " : " + mReading + " "
-					+ mDirectory);
 			super.onPreExecute();
 		}
 
@@ -170,13 +168,8 @@ public class FileBrowserFragment extends WifiCamFragment {
 				mFileListAdapter.notifyDataSetChanged();
 
 				if (!result.isCompleted() && fileList.size() > 0) {
-					mFileListTitle.setText(mFileBrowser + " : " + mReading
-							+ " " + mDirectory + " (" + sFileList.size() + " "
-							+ mItems + ")");
 					new ContiunedDownloadTask().execute(result);
 				} else {
-					mFileListTitle.setText(mFileBrowser + " : " + mDirectory
-							+ " (" + sFileList.size() + " " + mItems + ")");
 					setWaitingState(false);
 				}
 			}
@@ -194,12 +187,9 @@ public class FileBrowserFragment extends WifiCamFragment {
 	private static ArrayList<FileNode> sFileList = new ArrayList<FileNode>();
 	private static List<FileNode> sSelectedFiles = new LinkedList<FileNode>();
 	private static FileListAdapter mFileListAdapter;
+	private SwipeMenuCreator creator;
+	private SwipeMenuListView mFileListView;
 
-	private ListView mFileListView;
-	private TextView mFileListTitle;
-	private Button mSaveButton;
-	private Button mDeleteButton;
-	private Button mOpenButton;
 	private String mFileBrowser;
 	private String mReading;
 	private String mItems;
@@ -602,8 +592,6 @@ public class FileBrowserFragment extends WifiCamFragment {
 				fileNode.mSelected = false;
 				sFileList.remove(fileNode);
 				mFileListAdapter.notifyDataSetChanged();
-				mFileListTitle.setText(mFileBrowser + " : " + mDirectory + " ("
-						+ sFileList.size() + " " + mItems + ")");
 				mProgDlg.setMessage("Please wait, deleteing " + fileNode.mName);
 				mProgDlg.setProgress(mTotalFile - sSelectedFiles.size());
 				if (sSelectedFiles.size() > 0 && !mCancelDelete) {
@@ -613,8 +601,6 @@ public class FileBrowserFragment extends WifiCamFragment {
 						mProgDlg.dismiss();
 						mProgDlg = null;
 					}
-					mFileListTitle.setText(mFileBrowser + " : " + mDirectory
-							+ " (" + sFileList.size() + " " + mItems + ")");
 					setWaitingState(false);
 				}
 			} else if (activity != null) {
@@ -629,12 +615,19 @@ public class FileBrowserFragment extends WifiCamFragment {
 		}
 	}
 
+	private int dp2px(int dp) {
+		return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp,
+				getResources().getDisplayMetrics());
+	}
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
 		View view = inflater.inflate(R.layout.browser, container, false);
-
+		TextView tvHeaderTitle = (TextView) view.findViewById(R.id.frag_header)
+				.findViewById(R.id.header_title);
+		tvHeaderTitle.setText(R.string.end_title_recordcard);
 		mFileListAdapter = new FileListAdapter(inflater, sFileList);
 
 		mFileBrowser = getActivity().getResources().getString(
@@ -643,124 +636,115 @@ public class FileBrowserFragment extends WifiCamFragment {
 				R.string.label_reading);
 		mItems = getActivity().getResources().getString(R.string.label_items);
 
-		mFileListTitle = (TextView) view.findViewById(R.id.browserTitle);
-		mFileListTitle.setText(mFileBrowser + " : " + mDirectory);
-
-		mSaveButton = (Button) view.findViewById(R.id.browserDownloadButton);
-		mSaveButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				downloadFile(getActivity(), mIp);
-				mSaveButton.setEnabled(false);
-				mDeleteButton.setEnabled(false);
-				mOpenButton.setEnabled(false);
-			}
-		});
-
-		mDeleteButton = (Button) view.findViewById(R.id.browserDeleteButton);
-		mDeleteButton.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				mTotalFile = sSelectedFiles.size();
-				if (mTotalFile > 0) {
-					mProgDlg = new ProgressDialog(getActivity());
-					mProgDlg.setCancelable(false);
-					mProgDlg.setMax(mTotalFile);
-					mProgDlg.setProgress(0);
-					mProgDlg.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-					mProgDlg.setButton(DialogInterface.BUTTON_NEGATIVE,
-							"Cancel", new DialogInterface.OnClickListener() {
-								@Override
-								public void onClick(DialogInterface dialog,
-										int which) {
-									mCancelDelete = true;
-								}
-							});
-					mProgDlg.setTitle("Delete file in Camera");
-					mProgDlg.setMessage("Please wait ...");
-					mCancelDelete = false;
-					mProgDlg.show();
-					new CameraDeleteFile().execute();
-				}
-				// mSaveButton.setEnabled(false) ;
-				// mDeleteButton.setEnabled(false) ;
-				// mOpenButton.setEnabled(false) ;
-			}
-		});
-
-		mOpenButton = (Button) view.findViewById(R.id.browserOpenButton);
-		mOpenButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				FileNode fileNode = sSelectedFiles.get(0);
-				if (fileNode.mFormat == Format.mov) {
-					Intent intent = new Intent(Intent.ACTION_VIEW);
-					/* CarDV WiFi Support Video container is 3GP (.MOV) */
-					/* For HTTP File Streaming */
-					intent.setDataAndType(
-							Uri.parse("http://" + mIp + fileNode.mName),
-							"video/3gp");
-					startActivity(intent);
-
-					/* For HTML5 Video Streaming */
-					// String filename = fileNode.mName.replaceAll("/", "\\$");
-					// Intent browserIntent = new Intent(Intent.ACTION_VIEW,
-					// Uri.parse("http://"+mIp+"/cgi-bin/Config.cgi?action=play&property="
-					// + filename));
-					// startActivity(browserIntent);
-					// mSaveButton.setEnabled(false) ;
-					// mDeleteButton.setEnabled(false) ;
-					// mOpenButton.setEnabled(false) ;
-				}
-			}
-		});
-
-		mFileListView = (ListView) view.findViewById(R.id.browserList);
+		mFileListView = (SwipeMenuListView) view.findViewById(R.id.browserList);
 		mFileListView.setAdapter(mFileListAdapter);
+		creator = new SwipeMenuCreator() {
+			@Override
+			public void create(SwipeMenu menu) {
+				// create "open" item
+				SwipeMenuItem openItem = new SwipeMenuItem(getActivity()
+						.getApplicationContext());
+				// set item background
+				openItem.setBackground(new ColorDrawable(Color.rgb(0xC9, 0xC9,
+						0xCE)));
+				// set item width
+				openItem.setWidth(dp2px(90));
+				// set item title
+				openItem.setTitle("load");
+				// set item title fontsize
+				openItem.setTitleSize(18);
+				// set item title font color
+				openItem.setTitleColor(Color.WHITE);
+				// add to menu
+				menu.addMenuItem(openItem);
+
+				// create "delete" item
+				SwipeMenuItem deleteItem = new SwipeMenuItem(getActivity()
+						.getApplicationContext());
+				// set item background
+				deleteItem.setBackground(new ColorDrawable(Color.rgb(0xF9,
+						0x3F, 0x25)));
+				// set item width
+				deleteItem.setWidth(dp2px(90));
+				// set a icon
+				deleteItem.setIcon(R.drawable.ic_delete);
+				// add to menu
+				menu.addMenuItem(deleteItem);
+			}
+		};
+		mFileListView.setMenuCreator(creator);
 		mFileListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+
+		mFileListView.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+			@Override
+			public void onMenuItemClick(int position, SwipeMenu menu, int index) {
+				FileNode item = sFileList.get(position);
+				switch (index) {
+				case 0:
+					// download
+					Toast.makeText(getActivity(), "download : " + index,
+							Toast.LENGTH_SHORT).show();
+					sSelectedFiles.clear();
+					sSelectedFiles.add(item);
+					downloadFile(getActivity(), mIp);
+					break;
+				case 1:
+					// delete
+					Toast.makeText(getActivity(), "delete : " + index,
+							Toast.LENGTH_SHORT).show();
+					delItem(item);
+					break;
+				default:
+					break;
+				}
+			}
+
+		});
 
 		mFileListView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-
-				ViewTag viewTag = (ViewTag) view.getTag();
-				if (viewTag != null) {
-
-					FileNode file = viewTag.getmFileNode();
-
-					CheckedTextView checkBox = (CheckedTextView) view
-							.findViewById(R.id.fileListCheckBox);
-					checkBox.setChecked(!checkBox.isChecked());
-					file.mSelected = checkBox.isChecked();
-
-					if (file.mSelected)
-						sSelectedFiles.add(file);
-					else
-						sSelectedFiles.remove(file);
-
-					if (sSelectedFiles.size() > 0) {
-						if (sSelectedFiles.size() < 2) {
-							if (sSelectedFiles.get(0).mFormat == Format.mov) {
-								mOpenButton.setEnabled(true);
-							}
-						} else {
-							mOpenButton.setEnabled(false);
-						}
-						mSaveButton.setEnabled(true);
-						mDeleteButton.setEnabled(true);
-					} else {
-						mOpenButton.setEnabled(false);
-						mSaveButton.setEnabled(false);
-						mDeleteButton.setEnabled(false);
-					}
+				FileNode fileNode = sFileList.get(position);
+				Intent intent = new Intent(Intent.ACTION_VIEW);
+				if (fileNode.mFormat == Format.mov) {
+					/* CarDV WiFi Support Video container is 3GP (.MOV) */
+					/* For HTTP File Streaming */
+					intent.setDataAndType(
+							Uri.parse("http://" + mIp + fileNode.mName),
+							"video/3gp");
+					startActivity(intent);
+				} else if (fileNode.mFormat == Format.jpeg) {
+					Toast.makeText(getActivity(), "图片请下载再查看",
+							Toast.LENGTH_SHORT).show();
 				}
 			}
 		});
 
 		return view;
+	}
+
+	private void delItem(FileNode item) {
+		sSelectedFiles.clear();
+		sSelectedFiles.add(item);
+		mProgDlg = new ProgressDialog(getActivity());
+		mProgDlg.setCancelable(false);
+		mProgDlg.setMax(1);
+		mProgDlg.setProgress(0);
+		mProgDlg.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+		mProgDlg.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel",
+				new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						mCancelDelete = true;
+					}
+				});
+		mProgDlg.setTitle("Delete file in Camera");
+		mProgDlg.setMessage("Please wait ...");
+		mCancelDelete = false;
+		mProgDlg.show();
+		new CameraDeleteFile().execute();
 	}
 
 	@Override

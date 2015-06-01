@@ -24,7 +24,6 @@ import com.vless.wificam.MainActivity;
 import com.vless.wificam.Viewer.MediaUrlDialog.MediaUrlDialogHandler;
 import com.vless.wificam.contants.Contants;
 import com.vless.wificam.frags.WifiCamFragment;
-import com.vless.wificam.tasks.GetRTPS_AV1;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -53,12 +52,10 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceHolder.Callback;
 import android.view.SurfaceView;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -110,7 +107,6 @@ public class StreamPlayerFragment extends WifiCamFragment implements
 
 	private String mMediaUrl;
 
-	private static final String KEY_MEDIA_URL = "mediaUrl";
 	private TimeThread timestampthread;
 
 	class MyPeeker extends CameraPeeker {
@@ -493,7 +489,6 @@ public class StreamPlayerFragment extends WifiCamFragment implements
 			/* query video status (recording or not) in camera */
 			new GetRecordStatus().execute();
 		}
-		// mMediaUrl = getArguments().getString(KEY_MEDIA_URL,"");
 
 		IntentFilter filter = new IntentFilter();
 		filter.addAction(VLCApplication.SLEEP_INTENT);
@@ -513,8 +508,21 @@ public class StreamPlayerFragment extends WifiCamFragment implements
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+		boolean isWifiEnabled;
+		int netWorkId;
 		View view = inflater.inflate(R.layout.preview_player, container, false);
-
+		TextView tvHeaderTitle  = (TextView) view.findViewById(R.id.frag_header).findViewById(R.id.header_title);
+		isWifiEnabled = getArguments().getBoolean("isWifiEnabled",false);
+		netWorkId = getArguments().getInt("netWorkId", -1);
+		if(isWifiEnabled && netWorkId!=-1){
+			tvHeaderTitle.setText(getResources().getString(R.string.app_name)+"("+"连接"+")");
+			URL url = CameraCommand.commandCameraTimeSettingsUrl() ;
+			if (url != null) {
+				new CameraCommand.SendRequest().execute(url) ;
+			}
+		}else{
+			tvHeaderTitle.setText(getResources().getString(R.string.app_name)+"("+"未连接"+")");
+		}
 		SharedPreferences pref = PreferenceManager
 				.getDefaultSharedPreferences(getActivity());
 		curdate = (TextView) view.findViewById(R.id.TimeStampLabel);
@@ -552,12 +560,6 @@ public class StreamPlayerFragment extends WifiCamFragment implements
 			@Override
 			public void onClick(View v) {
 				new CameraSnapShot().execute();
-			}
-		});
-		mSurfaceFrame.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				// ivPause.setVisibility(View.VISIBLE);
 			}
 		});
 		ivCamRec.setEnabled(true);
@@ -929,16 +931,10 @@ public class StreamPlayerFragment extends WifiCamFragment implements
 			int msgid = msg.getData().getInt("msg");
 			switch (msgid) {
 			case MSG_VIDEO_RECORD:
-				// ivCamRec.setText(getActivity().getResources()
-				// .getString(R.string.label_camera_stop_record));
-				Toast.makeText(getActivity(), "开始录像", Toast.LENGTH_SHORT)
-						.show();
+				ivPause.setVisibility(View.GONE);
 				break;
 			case MSG_VIDEO_STOP:
-				// ivCamRec.setText(getActivity().getResources()
-				// .getString(R.string.label_camera_record));
-				Toast.makeText(getActivity(), "停止录像", Toast.LENGTH_SHORT)
-						.show();
+				ivPause.setVisibility(View.VISIBLE);
 				break;
 			case MSG_MODE_WRONG:
 			case MSG_MODE_CHANGE:

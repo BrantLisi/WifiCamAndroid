@@ -20,9 +20,6 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.database.Cursor;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
@@ -34,13 +31,10 @@ import android.provider.MediaStore.Images;
 import android.provider.MediaStore.MediaColumns;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.MenuItem.OnMenuItemClickListener;
-import android.view.SubMenu;
 import android.view.Window;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 public class MainActivity extends FragmentActivity {
 
@@ -124,40 +118,21 @@ public class MainActivity extends FragmentActivity {
 		}
 	}
 
-	private static Locale sDefaultLocale;
-	private static Locale sSelectedLocale;
-
-	static {
-		sDefaultLocale = Locale.getDefault();
-	}
-
-	public static Locale getDefaultLocale() {
-		return sDefaultLocale;
-	}
-
-	public static void setAppLocale(Locale locale) {
-		Locale.setDefault(locale);
-		sSelectedLocale = locale;
-	}
-
-	public static Locale getAppLocale() {
-		return sSelectedLocale == null ? sDefaultLocale : sSelectedLocale;
-	}
-
+	private WifiManager wifiManager;
 	public static CameraSniffer sniffer = null;
 	private List<WifiCamFragment> fragments = new ArrayList<WifiCamFragment>();
 	private FragmentTabAdapter tabAdapter;
 	private RadioGroup rgs;
-	private int selectedIndex;
 	private WifiCamFragment strmPlyFrg, filBrwFrg, locBrwFrg, camCtlFrg;
+	private RadioButton rb_curr, rb_sd, rb_local, rb_sett;
 
+	// private boolean isDoubleBack = true;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 
 		Log.i("Fragment Activity", "ON CREATE " + savedInstanceState);
-
 		System.setProperty("http.keepAlive", "false");
-
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
 
 		if (sniffer == null) {
@@ -165,22 +140,7 @@ public class MainActivity extends FragmentActivity {
 			sniffer.start();
 		}
 
-		if (sSelectedLocale == null) {
-			sSelectedLocale = sDefaultLocale;
-		}
-
-		Locale.setDefault(Locale.ENGLISH);
-		Configuration config = new Configuration();
-		config.locale = Locale.ENGLISH;
-		getResources().updateConfiguration(config, null);
-
 		sAppName = getResources().getString(R.string.app_name);
-
-		Locale.setDefault(sSelectedLocale);
-		config = new Configuration();
-		config.locale = sSelectedLocale;
-		getResources().updateConfiguration(config, null);
-
 		sAppDir = Environment.getExternalStorageDirectory().getPath()
 				+ File.separator + sAppName;
 		Log.i("Fragment Activity", sAppDir);
@@ -189,28 +149,17 @@ public class MainActivity extends FragmentActivity {
 			appDir.mkdirs();
 		}
 
-		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-
 		setContentView(R.layout.wifi_cam_main);
-
-		setTitle(getResources().getString(R.string.app_name));
-
-		getActionBar().setDisplayHomeAsUpEnabled(false);
-
-		setProgressBarIndeterminateVisibility(false);
 
 		if (savedInstanceState == null) {
 
-			WifiManager wifiManager = (WifiManager) getApplicationContext()
+			wifiManager = (WifiManager) getApplicationContext()
 					.getSystemService(Context.WIFI_SERVICE);
-
-			Log.i("brant", wifiManager.getConnectionInfo().toString());
-			Log.i("brant", wifiManager.isWifiEnabled() + " --- "
-					+ wifiManager.getConnectionInfo().getNetworkId() + " --- ");
 
 			if (wifiManager.isWifiEnabled()
 					&& wifiManager.getConnectionInfo().getNetworkId() != -1) {
-				initView();
+				initView(wifiManager.isWifiEnabled(), wifiManager
+						.getConnectionInfo().getNetworkId());
 			} else {
 				String title = getResources().getString(
 						R.string.dialog_no_connection_title);
@@ -228,24 +177,31 @@ public class MainActivity extends FragmentActivity {
 									public void onClick(DialogInterface dialog,
 											int which) {
 										dialog.dismiss();
-										initView();
+										initView(wifiManager.isWifiEnabled(),
+												wifiManager.getConnectionInfo()
+														.getNetworkId());
 									}
 								}).show();
 			}
 		}
 	}
 
-	private void initView() {
-		addFragments();
+	private void initView(boolean isWifiEnabled, int netWorkId) {
+		addFragments(isWifiEnabled, netWorkId);
 	}
 
-	private RadioButton rb_curr, rb_sd, rb_local, rb_sett;
-
-	private void addFragments() {
+	private void addFragments(boolean isWifiEnabled, int netWorkId) {
+		Bundle bundle = new Bundle();
+		bundle.putBoolean("isWifiEnabled", isWifiEnabled);
+		bundle.putInt("netWorkId", netWorkId);
 		strmPlyFrg = new StreamPlayerFragment();
+		strmPlyFrg.setArguments(bundle);
 		filBrwFrg = new FileBrowserFragment();
+		filBrwFrg.setArguments(bundle);
 		locBrwFrg = new LocalFileBrowserFragment();
+		locBrwFrg.setArguments(bundle);
 		camCtlFrg = new CameraControlFragment();
+		camCtlFrg.setArguments(bundle);
 
 		fragments.add(strmPlyFrg);
 		fragments.add(filBrwFrg);
@@ -257,7 +213,7 @@ public class MainActivity extends FragmentActivity {
 		rb_sd = (RadioButton) findViewById(R.id.tab_rb_b);
 		rb_local = (RadioButton) findViewById(R.id.tab_rb_c);
 		rb_sett = (RadioButton) findViewById(R.id.tab_rb_d);
-		
+
 		tabAdapter = new FragmentTabAdapter(this, fragments, R.id.tab_content,
 				rgs);
 		tabAdapter
@@ -265,7 +221,6 @@ public class MainActivity extends FragmentActivity {
 					@Override
 					public void OnRgsExtraCheckedChanged(RadioGroup radioGroup,
 							final int checkedId, int index) {
-						selectedIndex = index;
 						runOnUiThread(new Runnable() {
 							@Override
 							public void run() {
@@ -279,30 +234,35 @@ public class MainActivity extends FragmentActivity {
 	private void getCurFragFoucs(int checkedId) {
 		switch (checkedId) {
 		case R.id.tab_rb_a:
+			setTitle(getResources().getString(R.string.app_name));
 			rb_curr.setBackgroundResource(R.drawable.currvideo_on);
 			rb_sd.setBackgroundResource(R.drawable.sd_off);
 			rb_local.setBackgroundResource(R.drawable.loc_off);
 			rb_sett.setBackgroundResource(R.drawable.sett_off);
 			break;
 		case R.id.tab_rb_b:
+			setTitle(getResources().getString(R.string.end_title_recordcard));
 			rb_curr.setBackgroundResource(R.drawable.currvideo_off);
 			rb_sd.setBackgroundResource(R.drawable.sd_on);
 			rb_local.setBackgroundResource(R.drawable.loc_off);
 			rb_sett.setBackgroundResource(R.drawable.sett_off);
 			break;
 		case R.id.tab_rb_c:
+			setTitle(getResources().getString(R.string.end_title_localfile));
 			rb_curr.setBackgroundResource(R.drawable.currvideo_off);
 			rb_sd.setBackgroundResource(R.drawable.sd_off);
 			rb_local.setBackgroundResource(R.drawable.loc_on);
 			rb_sett.setBackgroundResource(R.drawable.sett_off);
 			break;
 		case R.id.tab_rb_d:
+			setTitle(getResources().getString(R.string.end_title_setting));
 			rb_curr.setBackgroundResource(R.drawable.currvideo_off);
 			rb_sd.setBackgroundResource(R.drawable.sd_off);
 			rb_local.setBackgroundResource(R.drawable.loc_off);
 			rb_sett.setBackgroundResource(R.drawable.sett_on);
 			break;
 		default:
+			setTitle(getResources().getString(R.string.app_name));
 			rb_curr.setBackgroundResource(R.drawable.currvideo_on);
 			rb_sd.setBackgroundResource(R.drawable.sd_off);
 			rb_local.setBackgroundResource(R.drawable.loc_off);
@@ -311,112 +271,13 @@ public class MainActivity extends FragmentActivity {
 		}
 	}
 
-	private SubMenu mLanguageSubMenu;
-	private String[] mLanguageNames;
-	private Locale[] mLocales;
-
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		mLanguageNames = new String[] {
-				getResources().getString(R.string.label_default), "English",
-				getResources().getString(R.string.label_language_TChinese),
-				getResources().getString(R.string.label_language_SChinese),
-				getResources().getString(R.string.label_language_Russian),
-				getResources().getString(R.string.label_language_Spanish),
-				getResources().getString(R.string.label_language_Portuguese),
-				getResources().getString(R.string.label_language_French),
-				getResources().getString(R.string.label_language_Italian),
-				getResources().getString(R.string.label_language_Germany),
-				getResources().getString(R.string.label_language_Czech),
-				getResources().getString(R.string.label_language_Japanese),
-				getResources().getString(R.string.label_language_Korean),
-				getResources().getString(R.string.label_language_Latvian),
-				getResources().getString(R.string.label_language_Polish),
-				getResources().getString(R.string.label_language_Romanian),
-				getResources().getString(R.string.label_language_Slovak),
-				getResources().getString(R.string.label_language_Ukrainian) };
+	public void onBackPressed() {
+		super.onBackPressed();
+		// if(isDoubleBack){
+		// isDoubleBack = false;
+		// Toast.makeText(this,"ÔÙµã»÷ÍË³ö", Toast.LENGTH_SHORT).show();
+		// }
 
-		mLocales = new Locale[] { MainActivity.getDefaultLocale(),
-				Locale.ENGLISH, Locale.TRADITIONAL_CHINESE,
-				Locale.SIMPLIFIED_CHINESE, new Locale("ru", "RU"),
-				new Locale("es", "ES"), new Locale("pt", "PT"), Locale.FRANCE,
-				Locale.ITALY, Locale.GERMANY, new Locale("cs", "CZ"),
-				Locale.JAPAN, Locale.KOREA, new Locale("lv", "LV"),
-				new Locale("pl", "PL"), new Locale("ro", "RO"),
-				new Locale("sk", "SK"), new Locale("uk", "UA") };
-
-		mLanguageSubMenu = menu.addSubMenu(0, 0, 0,
-				getResources().getString(R.string.label_language));
-
-		int i = 0;
-		for (String language : mLanguageNames) {
-			MenuItem item = mLanguageSubMenu.add(0, i++, 0, language);
-			item.setCheckable(true);
-		}
-		return true;
 	}
-
-	@Override
-	public boolean onPrepareOptionsMenu(Menu menu) {
-
-		if (mLanguageSubMenu != null) {
-
-			int size = mLanguageSubMenu.size();
-
-			for (int i = 0; i < size; i++) {
-				MenuItem item = mLanguageSubMenu.getItem(i);
-
-				if (i > 0 && getAppLocale().equals(mLocales[i])) {
-					item.setChecked(true);
-				} else {
-					item.setChecked(false);
-				}
-
-				item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
-
-					@Override
-					public boolean onMenuItemClick(MenuItem checkedItem) {
-
-						int size = mLanguageSubMenu.size();
-
-						for (int i = 0; i < size; i++) {
-							MenuItem item = mLanguageSubMenu.getItem(i);
-							if (checkedItem == item
-									&& item.isChecked() == false) {
-								item.setChecked(true);
-
-								setAppLocale(mLocales[i]);
-
-								Intent intent = getIntent();
-								finish();
-								startActivity(intent);
-							} else {
-								item.setChecked(false);
-							}
-						}
-						return true;
-					}
-				});
-			}
-		}
-
-		return super.onPrepareOptionsMenu(menu);
-	}
-
-	// @Override
-	// public boolean onOptionsItemSelected(MenuItem item) {
-	// switch (item.getItemId()) {
-	// case android.R.id.home:
-	// // backToFristFragment(this) ;
-	// return true;
-	// }
-	// return super.onOptionsItemSelected(item);
-	// }
-	//
-	// @Override
-	// public void onConfigurationChanged(Configuration newConfig) {
-	// super.onConfigurationChanged(newConfig);
-	// }
-
 }

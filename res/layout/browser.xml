@@ -3,66 +3,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black" 
-    tools:context="${relativePackage}.${activityClass}">
+    android:background="@color/black"
+    tools:context="${relativePackage}.${activityClass}" >
 
-    <TextView
-        android:id="@+id/browserTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_margin="10dp"
-        android:paddingBottom="10dp"
-        android:paddingTop="10dp"
-        android:text="@string/label_file_browser"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="@color/white"
-        android:textStyle="bold" />
+    <include
+        android:id="@+id/frag_header"
+        layout="@layout/header" />
 
-    <ListView
+    <com.baoyz.swipemenulistview.SwipeMenuListView
         android:id="@+id/browserList"
         android:layout_width="match_parent"
-        android:layout_height="200sp"
-        android:layout_above="@+id/buttonArea"
-        android:layout_below="@+id/browserTitle"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/frag_header"
         android:layout_gravity="center"
         android:divider="@color/white"
         android:dividerHeight="1px"
         android:footerDividersEnabled="true"
         android:orientation="vertical" >
-    </ListView>
-
-  
-
-    <LinearLayout
-        android:id="@+id/buttonArea"
-        style="?android:attr/buttonBarStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:gravity="center" >
-
-        <Button
-            android:id="@+id/browserDownloadButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/label_save" />
-
-        <Button
-            android:id="@+id/browserDeleteButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/label_delete" />
-
-        <Button
-            android:id="@+id/browserOpenButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/label_open" />
-    </LinearLayout>
+    </com.baoyz.swipemenulistview.SwipeMenuListView>
 
 </RelativeLayout>

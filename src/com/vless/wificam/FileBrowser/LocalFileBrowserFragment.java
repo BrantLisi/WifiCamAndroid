@@ -40,10 +40,12 @@ import android.view.View.OnClickListener;
 import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckedTextView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -54,15 +56,8 @@ public class LocalFileBrowserFragment extends WifiCamFragment {
 	private List<FileNode> mSelectedFiles = new LinkedList<FileNode>();
 
 	private LocalFileListAdapter mFileListAdapter;
-	private TextView mFileListTitle;
-	private Button mOpenButton;
-	private Button mDeleteButton;
-
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-
-		super.onCreate(savedInstanceState);
-	}
+	private SwipeMenuCreator creator;
+	private SwipeMenuListView fileListView;
 
 	private int dp2px(int dp) {
 		return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp,
@@ -74,41 +69,19 @@ public class LocalFileBrowserFragment extends WifiCamFragment {
 			Bundle savedInstanceState) {
 
 		View view = inflater.inflate(R.layout.local_browser, container, false);
-
+		TextView tvHeaderTitle = (TextView) view.findViewById(R.id.frag_header)
+				.findViewById(R.id.header_title);
+		tvHeaderTitle.setText(R.string.end_title_localfile);
 		mFileListAdapter = new LocalFileListAdapter(inflater, mFileList);
 
-		mFileListTitle = (TextView) view.findViewById(R.id.browserTitle);
-		String fileBrowser = getActivity().getResources().getString(
-				R.string.label_file_browser);
-		mFileListTitle.setText(fileBrowser + " : " + MainActivity.sAppName);
-
-		SwipeMenuListView fileListView = (SwipeMenuListView) view
-				.findViewById(R.id.browserList);
-
+		fileListView = (SwipeMenuListView) view.findViewById(R.id.browserList);
 		fileListView.setAdapter(mFileListAdapter);
 
 		// step 1. create a MenuCreator
-		SwipeMenuCreator creator = new SwipeMenuCreator() {
+		creator = new SwipeMenuCreator() {
 
 			@Override
 			public void create(SwipeMenu menu) {
-				// create "open" item
-				SwipeMenuItem openItem = new SwipeMenuItem(getActivity()
-						.getApplicationContext());
-				// set item background
-				openItem.setBackground(new ColorDrawable(Color.rgb(0xC9, 0xC9,
-						0xCE)));
-				// set item width
-				openItem.setWidth(dp2px(90));
-				// set item title
-				openItem.setTitle("Open");
-				// set item title fontsize
-				openItem.setTitleSize(18);
-				// set item title font color
-				openItem.setTitleColor(Color.WHITE);
-				// add to menu
-				menu.addMenuItem(openItem);
-
 				// create "delete" item
 				SwipeMenuItem deleteItem = new SwipeMenuItem(getActivity()
 						.getApplicationContext());
@@ -130,111 +103,43 @@ public class LocalFileBrowserFragment extends WifiCamFragment {
 				FileNode item = mFileList.get(position);
 				switch (index) {
 				case 0:
-					// downLoad
-					Toast.makeText(getActivity(), "downLoad : "+index, Toast.LENGTH_SHORT).show();
-					downLoad(item);
-					break;
-				case 1:
 					// delete
-					Toast.makeText(getActivity(), "delete : "+index, Toast.LENGTH_SHORT).show();
-//					mFileList.remove(position);
-//					mFileListAdapter.notifyDataSetChanged();
+					Toast.makeText(getActivity(), "delete : " + index,
+							Toast.LENGTH_SHORT).show();
+					new File(item.mName).delete();
+					new LoadFileListTask().execute();
 					break;
 				default:
 					break;
 				}
 			}
-		});
-		fileListView.setOnItemClickListener(new OnItemClickListener() {
 
+		});
+
+		fileListView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-
-				final FileNode fileNode = mFileList.get(position);
-				if (fileNode != null) {
-
-					ViewTag viewTag = (ViewTag) view.getTag();
-					if (viewTag != null) {
-
-						FileNode file = viewTag.getmFileNode();
-
-						CheckedTextView checkBox = (CheckedTextView) view
-								.findViewById(R.id.fileListCheckBox);
-						checkBox.setChecked(!checkBox.isChecked());
-						file.mSelected = checkBox.isChecked();
-
-						if (file.mSelected)
-							mSelectedFiles.add(file);
-						else
-							mSelectedFiles.remove(file);
-
-						if (mSelectedFiles.size() == 1) {
-							mOpenButton.setEnabled(true);
-						} else {
-							mOpenButton.setEnabled(false);
-						}
-
-						if (mSelectedFiles.size() > 0) {
-							mDeleteButton.setEnabled(true);
-						} else {
-							mDeleteButton.setEnabled(false);
-						}
-
-					}
-				}
+				openFileNode(mFileList.get(position));
 			}
 		});
-
-		mOpenButton = (Button) view.findViewById(R.id.browserOpenButton);
-		mOpenButton.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				if (mSelectedFiles.size() == 1) {
-					FileNode fileNode = mSelectedFiles.get(0);
-					File file = new File(fileNode.mName);
-					Intent intent = new Intent(Intent.ACTION_VIEW);
-					if (fileNode.mFormat == Format.mov) {
-						/* CarDV WiFi Support Video is 3GP (.MOV) */
-						intent.setDataAndType(Uri.fromFile(file), "video/3gp");
-						startActivity(intent);
-					} else if (fileNode.mFormat == Format.avi) {
-						/* call self player */
-						VideoPlayerActivity.start(getActivity(), "file://"
-								+ fileNode.mName);
-					} else if (fileNode.mFormat == Format.jpeg) {
-						intent.setDataAndType(Uri.fromFile(file), "image/jpeg");
-						startActivity(intent);
-					}
-				}
-				mSelectedFiles.clear();
-				mOpenButton.setEnabled(false);
-				mDeleteButton.setEnabled(false);
-			}
-		});
-
-		mDeleteButton = (Button) view.findViewById(R.id.browserDeleteButton);
-		mDeleteButton.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-
-				for (FileNode fileNode : mSelectedFiles) {
-
-					File file = new File(fileNode.mName);
-
-					file.delete();
-				}
-				new LoadFileListTask().execute();
-			}
-		});
-
 		return view;
 	}
 
-	private void downLoad(FileNode item) {
-		
+	private void openFileNode(FileNode item) {
+		File file = new File(item.mName);
+		Intent intent = new Intent(Intent.ACTION_VIEW);
+		if (item.mFormat == Format.mov) {
+			/* CarDV WiFi Support Video is 3GP (.MOV) */
+			intent.setDataAndType(Uri.fromFile(file), "video/3gp");
+			startActivity(intent);
+		} else if (item.mFormat == Format.avi) {
+			/* call self player */
+			VideoPlayerActivity.start(getActivity(), "file://" + item.mName);
+		} else if (item.mFormat == Format.jpeg) {
+			intent.setDataAndType(Uri.fromFile(file), "image/jpeg");
+			startActivity(intent);
+		}
 	}
 
 	private class LoadFileListTask extends
@@ -248,8 +153,6 @@ public class LocalFileBrowserFragment extends WifiCamFragment {
 			mFileListAdapter.notifyDataSetChanged();
 
 			mSelectedFiles.clear();
-			mDeleteButton.setEnabled(false);
-			mOpenButton.setEnabled(false);
 
 			Log.i("LocalFileBrowserFragment", "pre execute");
 

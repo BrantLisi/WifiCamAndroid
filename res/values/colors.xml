@@ -2,10 +2,15 @@
 <resources>
     <color name="black">#000000</color>
     <color name="header_color">#121212</color>
-    <color name="header_line">#242424</color>
+    <color name="header_line">#AAAAAA</color>
     <color name="white">#ffffff</color>
     <color name="grey">#282828</color>
     <color name="bg_color">#555555</color>
     <color name="hint_color">#909090</color>
     <color name="line_color">#959595</color>
+    <color name="light_grey">#636363</color>
+    <color name="red">#CD2626</color>
+    <color name="green">#00CD00</color>
+    <color name="light_white">#F8F8FF</color>
+    
 </resources>
