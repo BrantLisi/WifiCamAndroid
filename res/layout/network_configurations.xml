@@ -19,24 +19,34 @@
         android:orientation="horizontal" >
 
         <TextView
-            android:layout_width="80sp"
-            android:layout_height="40sp"
+            style="@style/fontStyle"
+            android:layout_width="100sp"
+            android:layout_height="60sp"
             android:layout_gravity="center"
-            android:gravity="center|left"
-            android:text="@string/label_wifi_ssid"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/white"
-            android:textSize="30sp" />
+            android:gravity="center"
+            android:text="@string/set_ssid_old"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
             android:id="@+id/cameraControlWifiName"
-            android:layout_width="match_parent"
+            style="@style/fontStyle"
+            android:layout_width="160sp"
             android:layout_height="40sp"
             android:layout_gravity="center"
+            android:gravity="center|left"
             android:hint="@string/label_wifi_ssid"
-            android:singleLine="true"
-            android:textColor="@color/white"
-            android:textSize="30sp" />
+            android:singleLine="true" />
+
+        <TextView
+            android:id="@id/llSettSSID"
+            style="@style/fontStyle"
+            android:layout_width="60sp"
+            android:layout_height="30sp"
+            android:layout_gravity="center|right"
+            android:background="@drawable/background_mod"
+            android:gravity="center"
+            android:hint="@string/motify_others"
+            android:singleLine="true" />
     </LinearLayout>
 
     <LinearLayout
@@ -49,27 +59,39 @@
         android:orientation="horizontal" >
 
         <TextView
-            android:layout_width="80sp"
+            style="@style/fontStyle"
+            android:layout_width="100sp"
             android:layout_height="40sp"
             android:layout_gravity="center"
-            android:gravity="center|left"
+            android:gravity="center"
             android:text="@string/label_encryption_key"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/white"
-            android:textSize="30sp" />
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
             android:id="@+id/cameraControlWifiEncryptionKey"
-            android:layout_width="match_parent"
+            style="@style/fontStyle"
+            android:layout_width="160sp"
             android:layout_height="40sp"
             android:layout_gravity="center"
             android:background="@drawable/group_background"
+            android:gravity="center|left"
             android:hint="@string/label_encryption_key"
-            android:singleLine="true"
-            android:textColor="@color/white"
-            android:textSize="30sp" />
+            android:inputType="textPassword"
+            android:singleLine="true" />
+
+        <TextView
+            android:id="@id/llSettKeyWord"
+            style="@style/fontStyle"
+            android:layout_width="60sp"
+            android:layout_height="30sp"
+            android:layout_gravity="center|right"
+            android:background="@drawable/background_mod"
+            android:gravity="center"
+            android:hint="@string/motify_others"
+            android:singleLine="true" />
     </LinearLayout>
 
+    <!--
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="60sp"
@@ -85,5 +107,6 @@
             android:text="@string/label_re_activate_network"
             android:textColor="@color/white" />
     </LinearLayout>
+    -->
 
 </LinearLayout>

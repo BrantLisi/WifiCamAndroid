@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="300sp"
+    android:background="@color/light_grey"
+    android:gravity="center"
+    android:orientation="vertical" >
+
+    <TextView
+        style="@style/fontStyle"
+        android:layout_width="300sp"
+        android:layout_height="60sp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="@string/mod_wifi_pw" />
+
+    <EditText
+        android:id="@+id/et_passwd_old_login"
+        style="@style/fontStyle"
+        android:layout_width="300sp"
+        android:layout_height="60sp"
+        android:layout_gravity="center"
+        android:digits="1234567890"
+        android:hint="@string/set_passwd_old"
+        android:inputType="textPassword|phone" />
+
+    <EditText
+        android:id="@+id/et_passwd_new_login"
+        style="@style/fontStyle"
+        android:layout_width="300sp"
+        android:layout_height="60sp"
+        android:layout_gravity="center"
+        android:digits="1234567890"
+        android:hint="@string/set_passwd_new"
+        android:inputType="textPassword|phone" />
+
+    <LinearLayout
+        android:layout_marginTop="10sp"
+        android:layout_width="300sp"
+        android:layout_height="60sp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/btn_passwd_ok_login"
+            style="@style/fontStyle"
+            android:layout_width="80sp"
+            android:layout_height="50sp"
+            android:layout_gravity="center"
+            android:text="@string/regist_ok" />
+
+        <Button
+            android:id="@+id/btn_passwd_cancel_login"
+            style="@style/fontStyle"
+            android:layout_width="80sp"
+            android:layout_height="50sp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="60sp"
+            android:text="@string/regist_cancel" />
+    </LinearLayout>
+
+</LinearLayout>

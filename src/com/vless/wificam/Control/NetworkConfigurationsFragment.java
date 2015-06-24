@@ -15,8 +15,6 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,6 +38,8 @@ public class NetworkConfigurationsFragment extends WifiCamFragment implements
 	private Button btn_ok_ssid, btn_cnl_ssid, btn_pw_ok, btn_pw_cnl;
 	private Dialog ssid_diag, passwd_diag;
 	private URL url;
+	private boolean isWifiEnabled;
+	private int netWorkId;
 
 	@Override
 	public void setOnEcarFragListener(OnEcarInfoListener l) {
@@ -122,8 +122,8 @@ public class NetworkConfigurationsFragment extends WifiCamFragment implements
 			}
 			setWaitingState(false);
 
-//			checkSsid(mSsid);
-//			checkEncryptionKey(mEncryptionKey);
+			// checkSsid(mSsid);
+			// checkEncryptionKey(mEncryptionKey);
 
 			setInputEnabled(true);
 
@@ -214,6 +214,9 @@ public class NetworkConfigurationsFragment extends WifiCamFragment implements
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
+		isWifiEnabled = getArguments().getBoolean("isWifiEnabled", false);
+		netWorkId = getArguments().getInt("netWorkId", -1);
+
 		View view = inflater.inflate(R.layout.network_configurations,
 				container, false);
 		TextView tvHeaderTitle = (TextView) view.findViewById(R.id.frag_header)
@@ -221,7 +224,7 @@ public class NetworkConfigurationsFragment extends WifiCamFragment implements
 		tvHeaderTitle.setText(R.string.end_title_setting_wifi);
 		ivLeft = (ImageView) view.findViewById(R.id.frag_header).findViewById(
 				R.id.header_left);
-		ivLeft.setImageResource(R.drawable.left_back_black);
+		ivLeft.setImageResource(R.drawable.left_back);
 		ivLeft.setVisibility(View.VISIBLE);
 		ivLeft.setOnClickListener(new OnClickListener() {
 			@Override
@@ -242,10 +245,10 @@ public class NetworkConfigurationsFragment extends WifiCamFragment implements
 				.findViewById(R.id.cameraControlWifiEncryptionKey);
 		mViewList.add(mEncryptionKey);
 
-		Button resetButton = (Button) view
-				.findViewById(R.id.cameraControlResetButton);
-		mViewList.add(resetButton);
-		resetButton.setOnClickListener(this);
+		// Button resetButton = (Button) view
+		// .findViewById(R.id.cameraControlResetButton);
+		// mViewList.add(resetButton);
+		// resetButton.setOnClickListener(this);
 
 		// modify SSID
 		modSSIDView = getActivity().getLayoutInflater().inflate(
@@ -275,8 +278,14 @@ public class NetworkConfigurationsFragment extends WifiCamFragment implements
 		passwd_diag = new AlertDialog.Builder(getActivity()).setView(
 				modKeyWordView).create();
 
-		new GetWifiInfo().execute();
-
+		if (isWifiEnabled && netWorkId != -1) {
+			new GetWifiInfo().execute();
+		} else {
+			mSsid.setText("");
+			mEncryptionKey.setText("");
+			new AlertDialog.Builder(getActivity()).setTitle(R.string.dialog_no_connection_title)
+					.setMessage(R.string.dialog_no_connection_message).setPositiveButton("È·¶¨", null).show();
+		}
 		return view;
 	}
 
@@ -296,20 +305,20 @@ public class NetworkConfigurationsFragment extends WifiCamFragment implements
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.llSettSSID:
-			tv_ssid_old.setText(tv_ssid_old.getText()+""+mSsid.getText());
+			tv_ssid_old.setText(mSsid.getText());
 			et_ssid_new.setText(mSsid.getText());
 			ssid_diag.show();
 			break;
 		case R.id.llSettKeyWord:
 			passwd_diag.show();
 			break;
-		case R.id.cameraControlResetButton:
-			URL url = CameraCommand.commandReactivateUrl();
-			if (url != null) {
-				Log.i("brant", "reconnect --- url : " + url.toString());
-				new NetworkConfigurationSendRequest().execute(url);
-			}
-			break;
+		// case R.id.cameraControlResetButton:
+		// URL url = CameraCommand.commandReactivateUrl();
+		// if (url != null) {
+		// Log.i("brant", "reconnect --- url : " + url.toString());
+		// new NetworkConfigurationSendRequest().execute(url);
+		// }
+		// break;
 		case R.id.btn_ssid_ok:
 			modSSID();
 			ssid_diag.dismiss();
@@ -322,6 +331,8 @@ public class NetworkConfigurationsFragment extends WifiCamFragment implements
 			passwd_diag.dismiss();
 			break;
 		case R.id.btn_passwd_cancel_login:
+			et_passwd_old.setText("");
+			et_passwd_new.setText("");
 			passwd_diag.dismiss();
 			break;
 		default:
@@ -349,6 +360,8 @@ public class NetworkConfigurationsFragment extends WifiCamFragment implements
 				new NetworkConfigurationSendRequest().execute(url);
 			}
 		}
+		et_passwd_old.setText("");
+		et_passwd_new.setText("");
 	}
 
 	private void modSSID() {

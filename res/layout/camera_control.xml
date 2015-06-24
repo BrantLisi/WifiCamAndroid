@@ -19,15 +19,14 @@
 
         <TextView
             android:id="@+id/cameraControlNetworkConfigurationsTitle"
+            style="@style/fontStyle"
             android:layout_width="0sp"
             android:layout_height="30sp"
             android:layout_gravity="center"
             android:layout_weight="4"
             android:gravity="center|left"
-            android:paddingLeft="10sp"
-            android:text="@string/label_network_configurations"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="@color/white" />
+            android:paddingLeft="20sp"
+            android:text="@string/label_network_configurations" />
 
         <ImageView
             android:id="@id/cameraControlNetworkConfigurations"
@@ -46,16 +45,14 @@
 
         <TextView
             android:id="@+id/functionListPreviewTitle"
+            style="@style/fontStyle"
             android:layout_width="0sp"
             android:layout_height="30sp"
             android:layout_gravity="center"
             android:layout_weight="4"
             android:gravity="center|left"
-            android:paddingLeft="10sp"
-            android:text="@string/label_camera_settings"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="@color/white"
-            android:textSize="20sp" />
+            android:paddingLeft="20sp"
+            android:text="@string/label_camera_settings" />
 
         <ImageView
             android:id="@id/cameraControlCameraSettings"

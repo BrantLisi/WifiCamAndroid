@@ -649,12 +649,8 @@ public class FileBrowserFragment extends WifiCamFragment {
 						0xCE)));
 				// set item width
 				openItem.setWidth(dp2px(90));
-				// set item title
-				openItem.setTitle("load");
-				// set item title fontsize
-				openItem.setTitleSize(18);
-				// set item title font color
-				openItem.setTitleColor(Color.WHITE);
+				// set a icon
+				openItem.setIcon(R.drawable.ic_load);
 				// add to menu
 				menu.addMenuItem(openItem);
 
@@ -682,16 +678,16 @@ public class FileBrowserFragment extends WifiCamFragment {
 				switch (index) {
 				case 0:
 					// download
-					Toast.makeText(getActivity(), "download : " + index,
-							Toast.LENGTH_SHORT).show();
+					// Toast.makeText(getActivity(), "download : " + index,
+					// Toast.LENGTH_SHORT).show();
 					sSelectedFiles.clear();
 					sSelectedFiles.add(item);
 					downloadFile(getActivity(), mIp);
 					break;
 				case 1:
 					// delete
-					Toast.makeText(getActivity(), "delete : " + index,
-							Toast.LENGTH_SHORT).show();
+					// Toast.makeText(getActivity(), "delete : " + index,
+					// Toast.LENGTH_SHORT).show();
 					delItem(item);
 					break;
 				default:

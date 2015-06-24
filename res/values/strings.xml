@@ -9,7 +9,8 @@
     <string name="label_video_resolution">Definition</string>
     <string name="label_image_resolution">Image Resolution</string>
     <string name="label_motion_detection">Motion Detection</string>
-    <string name="label_record_voice">recorder voice</string>
+    <string name="label_record_voice">Recorder Voice</string>
+    <string name="label_formart_cam">Format Camera SD Card</string>
     <string name="label_on">On</string>
     <string name="label_off">Off</string>
     <string name="label_flicker_frequency">Flicker Frequency</string>
@@ -27,7 +28,7 @@
     <string name="label_ip_camera_browser">Camera File Browser</string>
     <string name="label_local_album">Local Album</string>
     <string name="label_wifi_ssid">SSID:</string>
-    <string name="label_encryption_key">Key:</string>
+    <string name="label_encryption_key">Key : </string>
     <string name="label_update">Update</string>
     <string name="label_re_activate_network">Reset</string>
     <string name="label_find_camera">Find Camera</string>
@@ -105,9 +106,19 @@
     <string name="mod_wifi_pw">Motify WIFI Passwd</string>
     <string name="regist_ok">Sure</string>
     <string name="regist_cancel">Cancel</string>
-    <string name="set_ssid_old">Old SSID</string>
-    <string name="set_ssid_new">New SSID</string>
+    <string name="set_ssid_old">Device : </string>
+    <string name="set_ssid_new">New Device</string>
     <string name="set_passwd_old">Old ：</string>
     <string name="set_passwd_new">New ：</string>
+    <string name="motify_others"> SET </string>
+
+    <!-- current voideo -->
+    <string name="curr_void_pause">pause</string>
+
+    <!-- make sure to format -->
+    <string name="notice_title">Notice</string>
+    <string name="notice_title_ok">Sure</string>
+    <string name="notice_title_cnl">Cancel</string>
+    <string name="make_sure_to_format">Are sure to format camera SD card ？</string>
 
 </resources>

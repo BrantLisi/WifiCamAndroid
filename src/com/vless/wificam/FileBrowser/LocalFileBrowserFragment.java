@@ -104,8 +104,8 @@ public class LocalFileBrowserFragment extends WifiCamFragment {
 				switch (index) {
 				case 0:
 					// delete
-					Toast.makeText(getActivity(), "delete : " + index,
-							Toast.LENGTH_SHORT).show();
+					// Toast.makeText(getActivity(), "delete : " + index,
+					// Toast.LENGTH_SHORT).show();
 					new File(item.mName).delete();
 					new LoadFileListTask().execute();
 					break;

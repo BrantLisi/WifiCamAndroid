@@ -69,10 +69,9 @@ public class StreamPlayerFragment extends WifiCamFragment implements
 	private SurfaceHolder mSurfaceHolder;
 	private FrameLayout mSurfaceFrame;
 	private LibVLC mLibVLC;
-	private TextView curdate;
+	private TextView curdate,tvPause;
 	private ImageView ivCamRec;
 	private ImageView ivCamSnap;
-	private ImageView ivPause;
 	private static Date mCameraTime;
 	private static long mCameraUptimeMills;
 	private String mTime;
@@ -515,7 +514,7 @@ public class StreamPlayerFragment extends WifiCamFragment implements
 		isWifiEnabled = getArguments().getBoolean("isWifiEnabled",false);
 		netWorkId = getArguments().getInt("netWorkId", -1);
 		if(isWifiEnabled && netWorkId!=-1){
-			tvHeaderTitle.setText(getResources().getString(R.string.app_name)+"("+"连接"+")");
+			tvHeaderTitle.setText(getResources().getString(R.string.app_name)+"("+"已连接"+")");
 			URL url = CameraCommand.commandCameraTimeSettingsUrl() ;
 			if (url != null) {
 				new CameraCommand.SendRequest().execute(url) ;
@@ -548,7 +547,7 @@ public class StreamPlayerFragment extends WifiCamFragment implements
 
 		ivCamRec = (ImageView) view.findViewById(R.id.cameraRecordButton);
 		ivCamSnap = (ImageView) view.findViewById(R.id.cameraSnapshotButton);
-		ivPause = (ImageView) view.findViewById(R.id.iv_pause);
+		tvPause = (TextView) view.findViewById(R.id.tv_pause);
 		ivCamRec.setOnClickListener(new Button.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -931,10 +930,10 @@ public class StreamPlayerFragment extends WifiCamFragment implements
 			int msgid = msg.getData().getInt("msg");
 			switch (msgid) {
 			case MSG_VIDEO_RECORD:
-				ivPause.setVisibility(View.GONE);
+				tvPause.setVisibility(View.GONE);
 				break;
 			case MSG_VIDEO_STOP:
-				ivPause.setVisibility(View.VISIBLE);
+				tvPause.setVisibility(View.VISIBLE);
 				break;
 			case MSG_MODE_WRONG:
 			case MSG_MODE_CHANGE:

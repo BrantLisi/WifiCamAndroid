@@ -4,12 +4,13 @@
     <string name="app_name">WiFi记录仪</string>
     <string name="label_file_browser">档案浏览</string>
     <string name="label_camera_control">相机控制</string>
-    <string name="label_network_configurations">Wifi设置</string>
-    <string name="label_camera_settings">相机设置</string>
+    <string name="label_network_configurations">WI-FI设置</string>
+    <string name="label_camera_settings">画面设置</string>
     <string name="label_video_resolution">清晰度</string>
     <string name="label_image_resolution">照片解析度</string>
     <string name="label_motion_detection">移动侦测</string>
     <string name="label_record_voice">声  音</string>
+    <string name="label_formart_cam">格式化记录仪SD卡</string>
     <string name="label_on">开</string>
     <string name="label_off">关</string>
     <string name="label_flicker_frequency">闪烁频率</string>
@@ -27,7 +28,7 @@
     <string name="label_ip_camera_browser">相机档案浏览</string>
     <string name="label_local_album">手机相本</string>
     <string name="label_wifi_ssid">SSID:</string>
-    <string name="label_encryption_key">密码:</string>
+    <string name="label_encryption_key">密码 ：</string>
     <string name="label_update">更新</string>
     <string name="label_re_activate_network">WIFI复位</string>
     <string name="label_find_camera">寻找相机</string>
@@ -92,7 +93,7 @@
     <string name="end_title_localfile">手机本地</string>
     <string name="end_title_setting">设置</string>
     <string name="end_title_setting_wifi">WI-FI 设置</string>
-    <string name="end_title_setting_face">界面设置</string>
+    <string name="end_title_setting_face">画面设置</string>
 
     <!-- definition -->
     <string name="definition_high"> 高 清 </string>
@@ -104,9 +105,18 @@
        <string name="mod_wifi_pw">修改WIFI密码</string>
     <string name="regist_ok">确认</string>
     <string name="regist_cancel">取消</string>
-      <string name="set_ssid_old">旧 SSID</string>
-    <string name="set_ssid_new">新 SSID</string>
+      <string name="set_ssid_old">设备 ：</string>
+    <string name="set_ssid_new">新设备 ：</string>
     <string name="set_passwd_old">旧密码：</string>
     <string name="set_passwd_new">新密码：</string>
+    <string name="motify_others">设置</string>
     
+    <!-- current voideo -->
+    <string name="curr_void_pause">暂停</string>
+    
+    <!-- make sure to format -->
+    <string name="notice_title">提 示</string>
+    <string name="notice_title_ok">确定</string>
+    <string name="notice_title_cnl">取消</string>
+	<string name="make_sure_to_format">你确定要格式化记录仪SD卡吗？</string>
 </resources>

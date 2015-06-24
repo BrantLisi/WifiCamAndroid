@@ -36,20 +36,22 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@color/red" />
 
-            <ImageView
-                android:id="@+id/iv_pause"
-                android:layout_width="40dp"
+            <TextView
+                android:id="@+id/tv_pause"
+                android:layout_width="60dp"
                 android:layout_height="40dp"
+                android:gravity="center"
+                android:text="@string/curr_void_pause"
+                android:textColor="@color/red"
                 android:layout_gravity="bottom|right"
-                android:src="@drawable/ic_pause_normal"
-                android:visibility="invisible" />
+                android:visibility="visible" />
         </FrameLayout>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"
+        android:layout_weight="1.5"
         android:gravity="center_horizontal"
         android:orientation="horizontal" >
 

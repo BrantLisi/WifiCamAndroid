@@ -8,10 +8,14 @@ import com.vless.wificam.CameraCommand;
 import com.vless.wificam.CameraPeeker;
 import com.vless.wificam.CameraSniffer;
 import com.vless.wificam.MainActivity;
+import com.vless.wificam.contants.Contants;
 import com.vless.wificam.frags.WifiCamFragment;
 import com.vless.wificam.impls.OnEcarInfoListener;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,18 +23,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.os.AsyncTask;
 
 public class CameraSettingsFragment extends WifiCamFragment implements
-		OnClickListener {
+		OnClickListener, Contants {
 	private TextView tvHigh, tvMid, tvLow;
-	private ImageView ivMotDet, ivVoicCtl;
-	private View view;
+	private ImageView ivMotDet, ivVoicCtl, ivFormatCamSD;
+	private View view, sureView;
 	private ImageView ivLeft;
 	private OnEcarInfoListener onEcarInfoListener;
+	private Dialog dialog;
+	private Button btn_ok, btn_cnl;
+	private boolean isWifiEnabled;
+	private int netWorkId;
 
 	@Override
 	public void setOnEcarFragListener(OnEcarInfoListener l) {
@@ -70,7 +79,7 @@ public class CameraSettingsFragment extends WifiCamFragment implements
 
 		@Override
 		protected void onPostExecute(String result) {
-			int VideoRes = 0, ImageRes = 0, MTD = 0;
+			int VideoRes = 0, MTD = 0, voiceRes = 0;
 
 			Activity activity = getActivity();
 			Log.d("GetMenuSettingsValues", "result property : >" + result + "<");
@@ -82,15 +91,15 @@ public class CameraSettingsFragment extends WifiCamFragment implements
 						.getProperty("line.separator"));
 				VideoRes = Integer.parseInt(lines[0].substring(0, 1));
 
-				lines_temp = result.split("ImageRes=");
-				lines = lines_temp[1].split(System
-						.getProperty("line.separator"));
-				ImageRes = Integer.parseInt(lines[0].substring(0, 1));
-				if (VideoRes == 0 && ImageRes == 0) {
+				// lines_temp = result.split("ImageRes=");
+				// lines = lines_temp[1].split(System
+				// .getProperty("line.separator"));
+				// ImageRes = Integer.parseInt(lines[0].substring(0, 1));
+				if (VideoRes == 0) {
 					setSettStat(0);
-				} else if (VideoRes == 1 && ImageRes == 3) {
+				} else if (VideoRes == 1) {
 					setSettStat(1);
-				} else if (VideoRes == 3 && ImageRes == 6) {
+				} else if (VideoRes == 3) {
 					setSettStat(2);
 				} else {
 					setSettStat(0);
@@ -107,6 +116,22 @@ public class CameraSettingsFragment extends WifiCamFragment implements
 				case 1:
 					isMotDet = false;
 					setSettStat(3);
+					break;
+				default:
+					break;
+				}
+				lines_temp = result.split("Flicker=");
+				lines = lines_temp[1].split(System
+						.getProperty("line.separator"));
+				voiceRes = Integer.parseInt(lines[0].substring(0, 1));
+				switch (voiceRes) {
+				case 0:
+					isVoicOpen = false;
+					setSettStat(4);
+					break;
+				case 1:
+					isVoicOpen = true;
+					setSettStat(4);
 					break;
 				default:
 					break;
@@ -161,13 +186,14 @@ public class CameraSettingsFragment extends WifiCamFragment implements
 		tvHeaderTitle.setText(R.string.end_title_setting_face);
 		ivLeft = (ImageView) view.findViewById(R.id.frag_header).findViewById(
 				R.id.header_left);
-		ivLeft.setImageResource(R.drawable.left_back_black);
+		ivLeft.setImageResource(R.drawable.left_back);
 		ivLeft.setVisibility(View.VISIBLE);
 		tvHigh = (TextView) view.findViewById(R.id.tv_high);
 		tvMid = (TextView) view.findViewById(R.id.tv_mindle);
 		tvLow = (TextView) view.findViewById(R.id.tv_low);
 		ivMotDet = (ImageView) view.findViewById(R.id.ivSettMotDet);
 		ivVoicCtl = (ImageView) view.findViewById(R.id.ivCamSettVoic);
+		ivFormatCamSD = (ImageView) view.findViewById(R.id.ivFormatCamSD);
 		ivLeft.setOnClickListener(this);
 		tvHigh.setOnClickListener(this);
 		tvMid.setOnClickListener(this);
@@ -176,13 +202,33 @@ public class CameraSettingsFragment extends WifiCamFragment implements
 		tvLow.setOnClickListener(this);
 		ivMotDet.setOnClickListener(this);
 		ivVoicCtl.setOnClickListener(this);
+		ivFormatCamSD.setOnClickListener(this);
+
+		sureView = getActivity().getLayoutInflater().inflate(
+				R.layout.set_format_cam_sd, null, false);
+		btn_ok = (Button) sureView.findViewById(R.id.btn_set_ok);
+		btn_cnl = (Button) sureView.findViewById(R.id.btn_set_cancel);
+		btn_ok.setOnClickListener(this);
+		btn_cnl.setOnClickListener(this);
+		dialog = new AlertDialog.Builder(getActivity()).setView(sureView)
+				.create();
 
 		return view;
 	}
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		new GetMenuSettingsValues().execute();
+
+		isWifiEnabled = getArguments().getBoolean("isWifiEnabled", false);
+		netWorkId = getArguments().getInt("netWorkId", -1);
+		
+		if (isWifiEnabled && netWorkId != -1) {
+			new GetMenuSettingsValues().execute();
+		} else {
+			new AlertDialog.Builder(getActivity()).setTitle(R.string.dialog_no_connection_title)
+			.setMessage(R.string.dialog_no_connection_message).setPositiveButton("È·¶¨", null).show();
+		}
+		
 		CameraSniffer sniffer = MainActivity.sniffer;
 		MyPeeker peeker = new MyPeeker(this);
 		sniffer.SetPeeker(peeker);
@@ -206,7 +252,7 @@ public class CameraSettingsFragment extends WifiCamFragment implements
 
 	private URL url;
 	private Resources res;
-	private boolean isMotDet, isVoicOpen;
+	private static boolean isMotDet, isVoicOpen;
 
 	@Override
 	public void onClick(View v) {
@@ -221,44 +267,47 @@ public class CameraSettingsFragment extends WifiCamFragment implements
 				break;
 			case R.id.tv_high:
 				what = 0;
-				url = new URL(
-						"http://192.72.1.1/cgi-bin/Config.cgi?action=set&property=Videores&value=1080P30fps&property=Imageres&value=14M");
+				url = new URL(VIDEO_RESOLUTION_HIGH);
 				break;
 			case R.id.tv_mindle:
 				what = 1;
-				url = new URL(
-						"http://192.72.1.1/cgi-bin/Config.cgi?action=set&property=Videores&value=720P30fps&property=Imageres&value=5M");
+				url = new URL(VIDEO_RESOLUTION_MIDDLE);
 				break;
 			case R.id.tv_low:
 				what = 2;
-				url = new URL(
-						"http://192.72.1.1/cgi-bin/Config.cgi?action=set&property=Videores&value=VGA&property=Imageres&value=1.2M");
+				url = new URL(VIDEO_RESOLUTION_LOW);
 				break;
 			case R.id.ivSettMotDet:
 				what = 3;
 				if (isMotDet)
-					url = new URL(
-							"http://192.72.1.1/cgi-bin/Config.cgi?action=set&property=MTD&value=Off");
+					url = new URL(MOTION_SENSE_OFF);
 				else
-					url = new URL(
-							"http://192.72.1.1/cgi-bin/Config.cgi?action=set&property=MTD&value=Low");
+					url = new URL(MOTION_SENSE_ON);
 				break;
 			case R.id.ivCamSettVoic:
 				what = 4;
 				if (isVoicOpen)
-					url = new URL(
-							"http://192.72.1.1/cgi-bin/Config.cgi?action=set&property=MTD&value=Off");
+					url = new URL(VOICE_RECORD_OFF);
 				else
-					url = new URL(
-							"http://192.72.1.1/cgi-bin/Config.cgi?action=set&property=MTD&value=On");
+					url = new URL(VOICE_RECORD_ON);
 				break;
+			case R.id.ivFormatCamSD:
+				dialog.show();
+				return;
+			case R.id.btn_set_ok:
+				url = new URL(WIFI_SD_FORMARTTING);
+				dialog.dismiss();
+				break;
+			case R.id.btn_set_cancel:
+				dialog.dismiss();
+				return;
 			default:
 				break;
 			}
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}
-		if(isBack){
+		if (isBack) {
 			return;
 		}
 		setSettStat(what);

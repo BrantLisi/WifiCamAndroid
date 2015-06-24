@@ -17,7 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class CameraControlFragment extends WifiCamFragment {
-
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -49,7 +49,7 @@ public class CameraControlFragment extends WifiCamFragment {
 
 			@Override
 			public void onClick(View v) {
-				startActivity(new Intent(getActivity(),NetSettActivity.class));
+				startActivity(new Intent(getActivity(), NetSettActivity.class));
 			}
 		});
 
@@ -62,7 +62,7 @@ public class CameraControlFragment extends WifiCamFragment {
 
 			@Override
 			public void onClick(View v) {
-				startActivity(new Intent(getActivity(),CamSettActivity.class));
+				startActivity(new Intent(getActivity(), CamSettActivity.class));
 			}
 		});
 
