@@ -13,13 +13,18 @@ import com.vless.wificam.FileBrowser.FileBrowserFragment;
 import com.vless.wificam.FileBrowser.LocalFileBrowserFragment;
 import com.vless.wificam.Viewer.StreamPlayerFragment;
 import com.vless.wificam.adapts.FragmentTabAdapter;
+import com.vless.wificam.contants.Contants;
 import com.vless.wificam.frags.WifiCamFragment;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
@@ -117,7 +122,7 @@ public class MainActivity extends FragmentActivity {
 					.toString() + "/" + String.valueOf(id));
 		}
 	}
-
+	
 	private WifiManager wifiManager;
 	public static CameraSniffer sniffer = null;
 	private List<WifiCamFragment> fragments = new ArrayList<WifiCamFragment>();
@@ -125,8 +130,9 @@ public class MainActivity extends FragmentActivity {
 	private RadioGroup rgs;
 	private WifiCamFragment strmPlyFrg, filBrwFrg, locBrwFrg, camCtlFrg;
 	private RadioButton rb_curr, rb_sd, rb_local, rb_sett;
-
-	// private boolean isDoubleBack = true;
+	private SharedPreferences sp;
+	private Editor edit;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 
@@ -149,6 +155,11 @@ public class MainActivity extends FragmentActivity {
 			appDir.mkdirs();
 		}
 
+		sp = getSharedPreferences(Contants.USER_INFO, Activity.MODE_PRIVATE);
+		edit = sp.edit();
+		edit.putBoolean("isFromMain", false);
+		edit.commit();
+		
 		setContentView(R.layout.wifi_cam_main);
 
 		if (savedInstanceState == null) {
@@ -231,6 +242,12 @@ public class MainActivity extends FragmentActivity {
 				});
 	}
 
+	@Override
+	protected void onResume() {
+		Log.i("isMain","--- Main onResume ----");
+		super.onResume();
+	}
+	
 	private void getCurFragFoucs(int checkedId) {
 		switch (checkedId) {
 		case R.id.tab_rb_a:
@@ -271,13 +288,4 @@ public class MainActivity extends FragmentActivity {
 		}
 	}
 
-	@Override
-	public void onBackPressed() {
-		super.onBackPressed();
-		// if(isDoubleBack){
-		// isDoubleBack = false;
-		// Toast.makeText(this,"ÔÙµã»÷ÍË³ö", Toast.LENGTH_SHORT).show();
-		// }
-
-	}
 }

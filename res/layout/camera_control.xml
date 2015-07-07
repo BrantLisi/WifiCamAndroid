@@ -12,7 +12,7 @@
     <LinearLayout
         android:id="@+id/cameraControlNetworkConfigurations"
         android:layout_width="match_parent"
-        android:layout_height="60sp"
+        android:layout_height="40sp"
         android:layout_marginBottom="15dp"
         android:layout_marginTop="15dp"
         android:background="@drawable/group_background" >
@@ -21,7 +21,7 @@
             android:id="@+id/cameraControlNetworkConfigurationsTitle"
             style="@style/fontStyle"
             android:layout_width="0sp"
-            android:layout_height="30sp"
+            android:layout_height="40sp"
             android:layout_gravity="center"
             android:layout_weight="4"
             android:gravity="center|left"
@@ -31,7 +31,7 @@
         <ImageView
             android:id="@id/cameraControlNetworkConfigurations"
             android:layout_width="0sp"
-            android:layout_height="30sp"
+            android:layout_height="20sp"
             android:layout_gravity="center|right"
             android:layout_weight="1"
             android:src="@drawable/right_in" />
@@ -40,14 +40,14 @@
     <LinearLayout
         android:id="@+id/cameraControlCameraSettings"
         android:layout_width="match_parent"
-        android:layout_height="60sp"
+        android:layout_height="40sp"
         android:background="@drawable/group_background" >
 
         <TextView
             android:id="@+id/functionListPreviewTitle"
             style="@style/fontStyle"
             android:layout_width="0sp"
-            android:layout_height="30sp"
+            android:layout_height="40sp"
             android:layout_gravity="center"
             android:layout_weight="4"
             android:gravity="center|left"
@@ -57,7 +57,7 @@
         <ImageView
             android:id="@id/cameraControlCameraSettings"
             android:layout_width="0sp"
-            android:layout_height="30sp"
+            android:layout_height="20sp"
             android:layout_gravity="center|right"
             android:layout_weight="1"
             android:src="@drawable/right_in" />

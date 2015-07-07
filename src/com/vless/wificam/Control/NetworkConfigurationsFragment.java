@@ -87,8 +87,8 @@ public class NetworkConfigurationsFragment extends WifiCamFragment implements
 		protected void onPostExecute(String result) {
 
 			Activity activity = getActivity();
-			Log.i("GetWifiInfo", result);
 			if (result != null) {
+				Log.i("GetWifiInfo", result);
 
 				String[] lines = result.split(System
 						.getProperty("line.separator"));

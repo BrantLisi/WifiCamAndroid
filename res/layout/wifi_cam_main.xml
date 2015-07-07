@@ -5,72 +5,66 @@
     android:layout_height="fill_parent"
     android:background="@color/black"
     android:orientation="vertical" >
- <FrameLayout
-            android:id="@+id/tab_content"
-            android:layout_width="fill_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1.0" />
 
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="1dp"
-            android:background="@color/header_line" />
+    <FrameLayout
+        android:id="@+id/tab_content"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1.0" />
 
-        <RadioGroup
-            android:id="@+id/tabs_rg"
-            android:layout_width="match_parent"
-            android:layout_height="60sp"
-            android:background="@color/black"
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="@color/header_line" />
+
+    <RadioGroup
+        android:id="@+id/tabs_rg"
+        android:layout_width="match_parent"
+        android:layout_height="55sp"
+        android:background="@drawable/button"
+        android:gravity="center"
+        android:orientation="horizontal" >
+
+        <RadioButton
+            android:id="@+id/tab_rb_a"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/currvideo_on"
+            android:button="@null"
+            android:checked="true"
             android:gravity="center"
-            android:orientation="horizontal" >
+            android:singleLine="true" />
 
-            <RadioButton
-                android:id="@+id/tab_rb_a"
-                android:layout_width="0sp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15sp"
-                android:layout_marginRight="15sp"
-                android:layout_weight="1.0"
-                android:background="@drawable/currvideo_on"
-                android:button="@null"
-                android:checked="true"
-                android:gravity="center"
-                android:singleLine="true" />
+        <RadioButton
+            android:id="@+id/tab_rb_b"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30sp"
+            android:layout_marginRight="15sp"
+            android:background="@drawable/sd_off"
+            android:button="@null"
+            android:gravity="center"
+            android:singleLine="true" />
 
-            <RadioButton
-                android:id="@+id/tab_rb_b"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15sp"
-                android:layout_marginRight="15sp"
-                android:layout_weight="1.0"
-                android:background="@drawable/sd_off"
-                android:button="@null"
-                android:gravity="center"
-                android:singleLine="true" />
+        <RadioButton
+            android:id="@+id/tab_rb_c"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15sp"
+            android:layout_marginRight="30sp"
+            android:background="@drawable/loc_off"
+            android:button="@null"
+            android:gravity="center"
+            android:singleLine="true" />
 
-            <RadioButton
-                android:id="@+id/tab_rb_c"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15sp"
-                android:layout_marginRight="15sp"
-                android:layout_weight="1.0"
-                android:background="@drawable/loc_off"
-                android:button="@null"
-                android:gravity="center"
-                android:singleLine="true" />
+        <RadioButton
+            android:id="@+id/tab_rb_d"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/sett_off"
+            android:button="@null"
+            android:gravity="center"
+            android:singleLine="true" />
+    </RadioGroup>
 
-            <RadioButton
-                android:id="@+id/tab_rb_d"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15sp"
-                android:layout_marginRight="15sp"
-                android:layout_weight="1.0"
-                android:background="@drawable/sett_off"
-                android:button="@null"
-                android:gravity="center"
-                android:singleLine="true" />
-        </RadioGroup>
 </LinearLayout>

@@ -2,7 +2,9 @@ package com.vless.wificam.contants;
 
 public interface Contants {
 	public static int SCONNECTIONDELAY = 2000;
-
+	
+	public static String USER_INFO = "user_info";
+	
 	// public static String VIDEO_RESOLUTION_HIGH =
 	// "http://192.72.1.1/cgi-bin/Config.cgi?action=set&property=Videores&value=1080P30fps&property=Imageres&value=14M";
 	// public static String VIDEO_RESOLUTION_MIDDLE =

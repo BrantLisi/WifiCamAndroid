@@ -18,6 +18,7 @@ import com.vless.wificam.MainActivity;
 import com.vless.wificam.FileBrowser.Model.FileNode;
 import com.vless.wificam.FileBrowser.Model.FileBrowserModel.ModelException;
 import com.vless.wificam.FileBrowser.Model.FileNode.Format;
+import com.vless.wificam.contants.Contants;
 import com.vless.wificam.frags.WifiCamFragment;
 
 import android.app.Activity;
@@ -25,6 +26,8 @@ import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.content.pm.ApplicationInfo;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -52,6 +55,9 @@ import android.widget.Toast;
 
 public class LocalFileBrowserFragment extends WifiCamFragment {
 
+	private SharedPreferences sp;
+	private Editor edit;
+
 	private ArrayList<FileNode> mFileList = new ArrayList<FileNode>();
 	private List<FileNode> mSelectedFiles = new LinkedList<FileNode>();
 
@@ -67,6 +73,10 @@ public class LocalFileBrowserFragment extends WifiCamFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+
+		sp = getActivity().getSharedPreferences(Contants.USER_INFO,
+				Activity.MODE_PRIVATE);
+		edit = sp.edit();
 
 		View view = inflater.inflate(R.layout.local_browser, container, false);
 		TextView tvHeaderTitle = (TextView) view.findViewById(R.id.frag_header)
@@ -120,6 +130,8 @@ public class LocalFileBrowserFragment extends WifiCamFragment {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
+				edit.putBoolean("isFromMain", true);
+				edit.commit();
 				openFileNode(mFileList.get(position));
 			}
 		});
@@ -258,10 +270,10 @@ public class LocalFileBrowserFragment extends WifiCamFragment {
 
 	@Override
 	public void onResume() {
-
+		edit.putBoolean("isFromMain", false);
+		edit.commit();
 		restoreWaitingIndicator();
 		new LoadFileListTask().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
-
 		super.onResume();
 	}
 

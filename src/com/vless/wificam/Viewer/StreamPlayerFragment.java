@@ -1,5 +1,6 @@
 package com.vless.wificam.Viewer;
 
+import java.io.IOException;
 import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -38,6 +39,7 @@ import android.content.res.Configuration;
 import android.graphics.ImageFormat;
 import android.graphics.PixelFormat;
 import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.net.DhcpInfo;
 import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
@@ -65,11 +67,13 @@ public class StreamPlayerFragment extends WifiCamFragment implements
 
 	public final static String TAG = "VLC/VideoPlayerActivity";
 
+	private SharedPreferences sp;
+
 	private SurfaceView mSurface;
 	private SurfaceHolder mSurfaceHolder;
 	private FrameLayout mSurfaceFrame;
 	private LibVLC mLibVLC;
-	private TextView curdate,tvPause;
+	private TextView curdate, tvPause;
 	private ImageView ivCamRec;
 	private ImageView ivCamSnap;
 	private static Date mCameraTime;
@@ -156,6 +160,8 @@ public class StreamPlayerFragment extends WifiCamFragment implements
 			String liveStreamUrl;
 			WifiManager wifiManager = (WifiManager) getActivity()
 					.getSystemService(Context.WIFI_SERVICE);
+			if (wifiManager == null)
+				return;
 			DhcpInfo dhcpInfo = wifiManager.getDhcpInfo();
 			if (dhcpInfo == null || dhcpInfo.gateway == 0) {
 				AlertDialog alertDialog = new AlertDialog.Builder(getActivity())
@@ -368,12 +374,12 @@ public class StreamPlayerFragment extends WifiCamFragment implements
 			Activity activity = getActivity();
 			Log.d(TAG, "Video record response:" + result);
 			if (result != null && result.equals("709\n?") != true) {
-				Toast.makeText(
-						activity,
-						"录像 : "
-								+ activity.getResources().getString(
-										R.string.message_command_succeed),
-						Toast.LENGTH_SHORT).show();
+				// Toast.makeText(
+				// activity,
+				// activity.getResources().getString(
+				// R.string.message_command_succeed),
+				// Toast.LENGTH_SHORT).show();
+
 				// Command is successful, current status is Standby then change
 				// to Recording
 				if (IsVideoRecording())
@@ -418,12 +424,10 @@ public class StreamPlayerFragment extends WifiCamFragment implements
 			if (result != null && result.equals("709\n?") != true) {
 				Toast.makeText(
 						activity,
-						"拍照 : "
-								+ activity.getResources().getString(
-										R.string.message_command_succeed),
-						Toast.LENGTH_SHORT).show();
+						activity.getResources().getString(
+								R.string.take_photo_sscuss), Toast.LENGTH_SHORT)
+						.show();
 			} else if (activity != null) {
-
 				Toast.makeText(
 						activity,
 						"拍照 : "
@@ -507,20 +511,26 @@ public class StreamPlayerFragment extends WifiCamFragment implements
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		boolean isWifiEnabled;
-		int netWorkId;
+
+		sp = getActivity().getSharedPreferences(Contants.USER_INFO,
+				Activity.MODE_PRIVATE);
+
 		View view = inflater.inflate(R.layout.preview_player, container, false);
-		TextView tvHeaderTitle  = (TextView) view.findViewById(R.id.frag_header).findViewById(R.id.header_title);
-		isWifiEnabled = getArguments().getBoolean("isWifiEnabled",false);
-		netWorkId = getArguments().getInt("netWorkId", -1);
-		if(isWifiEnabled && netWorkId!=-1){
-			tvHeaderTitle.setText(getResources().getString(R.string.app_name)+"("+"已连接"+")");
-			URL url = CameraCommand.commandCameraTimeSettingsUrl() ;
+		TextView tvHeaderTitle = (TextView) view.findViewById(R.id.frag_header)
+				.findViewById(R.id.header_title);
+		boolean isWifiEnabled = getArguments().getBoolean("isWifiEnabled",
+				false);
+		int netWorkId = getArguments().getInt("netWorkId", -1);
+		if (isWifiEnabled && netWorkId != -1) {
+			tvHeaderTitle.setText(getResources().getString(R.string.app_name)
+					+ "(" + "已连接" + ")");
+			URL url = CameraCommand.commandCameraTimeSettingsUrl();
 			if (url != null) {
-				new CameraCommand.SendRequest().execute(url) ;
+				new CameraCommand.SendRequest().execute(url);
 			}
-		}else{
-			tvHeaderTitle.setText(getResources().getString(R.string.app_name)+"("+"未连接"+")");
+		} else {
+			tvHeaderTitle.setText(getResources().getString(R.string.app_name)
+					+ "(" + "未连接" + ")");
 		}
 		SharedPreferences pref = PreferenceManager
 				.getDefaultSharedPreferences(getActivity());
@@ -551,6 +561,7 @@ public class StreamPlayerFragment extends WifiCamFragment implements
 		ivCamRec.setOnClickListener(new Button.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				playTipMusic(R.raw.videorecordsound);
 				new CameraVideoRecord().execute();
 			}
 		});
@@ -558,6 +569,7 @@ public class StreamPlayerFragment extends WifiCamFragment implements
 		ivCamSnap.setOnClickListener(new Button.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				playTipMusic(R.raw.takephotosound);
 				new CameraSnapShot().execute();
 			}
 		});
@@ -569,6 +581,18 @@ public class StreamPlayerFragment extends WifiCamFragment implements
 			UpdateVideoButtonStatus(mRecordStatus);
 		}
 		return view;
+	}
+
+	private void playTipMusic(int resId) {
+		MediaPlayer mediaPlayer = MediaPlayer.create(getActivity(), resId);
+		try {
+			mediaPlayer.prepare();
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		mediaPlayer.start();
 	}
 
 	@Override
@@ -616,7 +640,6 @@ public class StreamPlayerFragment extends WifiCamFragment implements
 		if (activity != null) {
 
 			mProgressDialog = new ProgressDialog(activity);
-
 			mProgressDialog.setTitle("Connecting to Camera");
 			mProgressDialog.setCancelable(false);
 			mProgressDialog.show();
@@ -648,7 +671,14 @@ public class StreamPlayerFragment extends WifiCamFragment implements
 		super.onResume();
 		if ("".equals(mMediaUrl))
 			new GetRTPS_AV1().execute();
-		playLiveStream();
+
+		sp = getActivity().getSharedPreferences(Contants.USER_INFO,
+				Activity.MODE_PRIVATE);
+		Log.i("isMain", sp.getBoolean("isFromMain", false)
+				+ "--- streampaly onResume ----");
+		if (!sp.getBoolean("isFromMain", false)) {
+			playLiveStream();
+		}
 		mSurface.setKeepScreenOn(true);
 	}
 
@@ -930,10 +960,24 @@ public class StreamPlayerFragment extends WifiCamFragment implements
 			int msgid = msg.getData().getInt("msg");
 			switch (msgid) {
 			case MSG_VIDEO_RECORD:
-				tvPause.setVisibility(View.GONE);
+				tvPause.setText(R.string.curr_void_play);
+				tvPause.setTextColor(getResources().getColor(R.color.blue));
+				ivCamRec.setImageResource(R.drawable.record_off);
+				Toast.makeText(
+						getActivity(),
+						getActivity().getResources().getString(
+								R.string.curr_void_start), Toast.LENGTH_SHORT)
+						.show();
 				break;
 			case MSG_VIDEO_STOP:
-				tvPause.setVisibility(View.VISIBLE);
+				tvPause.setText(R.string.curr_void_pause);
+				tvPause.setTextColor(getResources().getColor(R.color.red));
+				ivCamRec.setImageResource(R.drawable.record_on);
+				Toast.makeText(
+						getActivity(),
+						getActivity().getResources().getString(
+								R.string.curr_void_pause), Toast.LENGTH_SHORT)
+						.show();
 				break;
 			case MSG_MODE_WRONG:
 			case MSG_MODE_CHANGE:

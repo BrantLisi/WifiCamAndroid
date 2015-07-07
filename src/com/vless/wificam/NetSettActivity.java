@@ -37,7 +37,7 @@ public class NetSettActivity extends FragmentActivity {
 		bundle.putBoolean("isWifiEnabled", wifiManager.isWifiEnabled());
 		bundle.putInt("netWorkId", wifiManager.getConnectionInfo()
 				.getNetworkId());
-		
+
 		setContentView(R.layout.net_settings);
 		FragmentTransaction fragTransaction = getSupportFragmentManager()
 				.beginTransaction();
@@ -46,6 +46,5 @@ public class NetSettActivity extends FragmentActivity {
 		netSettFrg.setArguments(bundle);
 		netSettFrg.setOnEcarFragListener(onDataListener);
 		fragTransaction.commit();
-
 	}
 }

@@ -114,11 +114,18 @@
 
     <!-- current voideo -->
     <string name="curr_void_pause">pause</string>
+    <string name="curr_void_play">record</string>
+    <string name="curr_void_start">start</string>
+     <string name="take_photo_sscuss">saved to SD card</string>
 
     <!-- make sure to format -->
     <string name="notice_title">Notice</string>
     <string name="notice_title_ok">Sure</string>
     <string name="notice_title_cnl">Cancel</string>
     <string name="make_sure_to_format">Are sure to format camera SD card ？</string>
+    <string name="ntic_old_device">Old Device:</string>
+    <string name="ntic_new_device">New Device:</string>
 
+    <!-- notice string -->
+	<string name="ntc_sav_to_sd">saved to cellphone canbe browsed</string>
 </resources>

@@ -112,11 +112,19 @@
     <string name="motify_others">设置</string>
     
     <!-- current voideo -->
-    <string name="curr_void_pause">暂停</string>
+    <string name="curr_void_pause">暂停录像</string>
+    <string name="curr_void_play">正在录像</string>
+    <string name="curr_void_start">开始录像</string>
+    <string name="take_photo_sscuss">图片已保存到SD卡</string>
     
     <!-- make sure to format -->
     <string name="notice_title">提 示</string>
     <string name="notice_title_ok">确定</string>
     <string name="notice_title_cnl">取消</string>
 	<string name="make_sure_to_format">你确定要格式化记录仪SD卡吗？</string>
+	<string name="ntic_old_device">原名称 :</string>
+    <string name="ntic_new_device">新名称 :</string>
+	
+	<!-- notice string -->
+	<string name="ntc_sav_to_sd">保存到手机上再进行浏览</string>
 </resources>

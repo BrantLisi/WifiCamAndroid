@@ -11,7 +11,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="60sp"
+        android:layout_height="40sp"
         android:layout_gravity="center"
         android:layout_marginTop="20sp"
         android:background="@drawable/group_background"
@@ -29,7 +29,7 @@
 
         <LinearLayout
             android:layout_width="0sp"
-            android:layout_height="60sp"
+            android:layout_height="40sp"
             android:layout_weight="2"
             android:background="@drawable/group_background"
             android:gravity="center"
@@ -44,7 +44,7 @@
                 android:gravity="center"
                 android:text="@string/definition_high"
                 android:textColor="@color/light_grey"
-                android:textSize="20sp" />
+                android:textSize="15sp" />
 
             <TextView
                 android:id="@+id/tv_mindle"
@@ -56,7 +56,7 @@
                 android:gravity="center"
                 android:text="@string/definition_midle"
                 android:textColor="@color/light_grey"
-                android:textSize="20sp" />
+                android:textSize="15sp" />
 
             <TextView
                 android:id="@+id/tv_low"
@@ -68,13 +68,13 @@
                 android:gravity="center"
                 android:text="@string/definition_low"
                 android:textColor="@color/light_grey"
-                android:textSize="20sp" />
+                android:textSize="15sp" />
         </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="60sp"
+        android:layout_height="40sp"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="20sp"
         android:background="@drawable/group_background"
@@ -84,7 +84,7 @@
         <TextView
             style="@style/fontStyle"
             android:layout_width="match_parent"
-            android:layout_height="60sp"
+            android:layout_height="40sp"
             android:layout_gravity="center_horizontal"
             android:layout_weight="7"
             android:gravity="center|left"
@@ -94,7 +94,7 @@
         <ImageView
             android:id="@+id/ivSettMotDet"
             android:layout_width="100sp"
-            android:layout_height="30sp"
+            android:layout_height="20sp"
             android:layout_gravity="center"
             android:layout_weight="3"
             android:clickable="true"
@@ -105,7 +105,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="60sp"
+        android:layout_height="40sp"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="20sp"
         android:background="@drawable/group_background"
@@ -115,7 +115,7 @@
         <TextView
             style="@style/fontStyle"
             android:layout_width="match_parent"
-            android:layout_height="60sp"
+            android:layout_height="40sp"
             android:layout_gravity="center_horizontal"
             android:layout_weight="7"
             android:gravity="center|left"
@@ -125,7 +125,7 @@
         <ImageView
             android:id="@+id/ivCamSettVoic"
             android:layout_width="100sp"
-            android:layout_height="30sp"
+            android:layout_height="20sp"
             android:layout_gravity="center"
             android:layout_weight="3"
             android:clickable="true"
@@ -136,7 +136,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="60sp"
+        android:layout_height="40sp"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="20sp"
         android:background="@drawable/group_background"
@@ -146,7 +146,7 @@
         <TextView
             style="@style/fontStyle"
             android:layout_width="match_parent"
-            android:layout_height="60sp"
+            android:layout_height="40sp"
             android:layout_gravity="center_horizontal"
             android:layout_weight="7"
             android:gravity="center|left"
@@ -156,7 +156,7 @@
         <ImageView
             android:id="@+id/ivFormatCamSD"
             android:layout_width="100sp"
-            android:layout_height="30sp"
+            android:layout_height="20sp"
             android:layout_gravity="center"
             android:layout_weight="3"
             android:clickable="true"

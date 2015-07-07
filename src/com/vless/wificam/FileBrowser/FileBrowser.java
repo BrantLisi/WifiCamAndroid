@@ -154,7 +154,15 @@ public class FileBrowser {
 		try {
 			URI uri = new URI(mUrl.getProtocol(), mUrl.getUserInfo(), mUrl.getHost(), mUrl.getPort(),
 					mUrl.getPath(), query, mUrl.getRef()) ;
-			url = uri.toURL() ;
+			Log.i("DownloadTask", "---- getProtocol -----"+mUrl.getProtocol());
+			Log.i("DownloadTask", "---- getUserInfo -----"+mUrl.getUserInfo());
+			Log.i("DownloadTask", "---- getHost -----"+mUrl.getHost());
+			Log.i("DownloadTask", "---- getPort -----"+mUrl.getPort());
+			Log.i("DownloadTask", "---- getPath -----"+mUrl.getPath());
+			Log.i("DownloadTask", "---- query -----"+query);
+			Log.i("DownloadTask", "---- getRef -----"+mUrl.getRef());
+			url = uri.toURL();
+			Log.i("DownloadTask", "---- url -----"+url.toString());
 			
 		} catch (URISyntaxException e) {
 			// TODO Auto-generated catch block

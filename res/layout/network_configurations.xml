@@ -12,7 +12,7 @@
     <LinearLayout
         android:id="@+id/llSettSSID"
         android:layout_width="match_parent"
-        android:layout_height="60sp"
+        android:layout_height="40sp"
         android:layout_gravity="center"
         android:layout_marginTop="30sp"
         android:background="@drawable/group_background"
@@ -21,7 +21,7 @@
         <TextView
             style="@style/fontStyle"
             android:layout_width="100sp"
-            android:layout_height="60sp"
+            android:layout_height="40sp"
             android:layout_gravity="center"
             android:gravity="center"
             android:text="@string/set_ssid_old"
@@ -43,16 +43,16 @@
             android:layout_width="60sp"
             android:layout_height="30sp"
             android:layout_gravity="center|right"
-            android:background="@drawable/background_mod"
             android:gravity="center"
-            android:hint="@string/motify_others"
+            
+            android:text="@string/motify_others"
             android:singleLine="true" />
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/llSettKeyWord"
         android:layout_width="match_parent"
-        android:layout_height="60sp"
+        android:layout_height="40sp"
         android:layout_gravity="center"
         android:layout_marginTop="30sp"
         android:background="@drawable/group_background"
@@ -85,9 +85,8 @@
             android:layout_width="60sp"
             android:layout_height="30sp"
             android:layout_gravity="center|right"
-            android:background="@drawable/background_mod"
             android:gravity="center"
-            android:hint="@string/motify_others"
+            android:text="@string/motify_others"
             android:singleLine="true" />
     </LinearLayout>
 

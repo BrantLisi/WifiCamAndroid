@@ -25,6 +25,7 @@ import com.vless.wificam.MainActivity;
 import com.vless.wificam.FileBrowser.Model.FileNode;
 import com.vless.wificam.FileBrowser.Model.FileNode.Format;
 import com.vless.wificam.Viewer.StreamPlayerFragment;
+import com.vless.wificam.contants.Contants;
 import com.vless.wificam.frags.WifiCamFragment;
 
 import android.app.Activity;
@@ -37,6 +38,8 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.DhcpInfo;
@@ -71,6 +74,9 @@ public class FileBrowserFragment extends WifiCamFragment {
 	private int mTotalFile;
 	private int mfrom;
 	private boolean mCancelDelete;
+
+	private SharedPreferences sp;
+	private Editor edit;
 
 	class MyPeeker extends CameraPeeker {
 		FileBrowserFragment theFrag;
@@ -117,9 +123,7 @@ public class FileBrowserFragment extends WifiCamFragment {
 
 				if (activity == null)
 					return;
-
 				if (activity != null) {
-
 					List<FileNode> fileList = result.getFileList();
 
 					sFileList.addAll(fileList);
@@ -283,14 +287,13 @@ public class FileBrowserFragment extends WifiCamFragment {
 						}
 					}
 				} finally {
-					// Log.i("DownloadTask", "doInBackground close START") ;
-					// inputStream.close() ;
-					// fileOutput.close() ;
-					// Log.i("DownloadTask", "doInBackground disconnect START")
-					// ;
-					// urlConnection.disconnect() ;
+					// Log.i("DownloadTask", "doInBackground close START");
+					// inputStream.close();
+					// fileOutput.close();
+					// Log.i("DownloadTask", "doInBackground disconnect START");
+					// urlConnection.disconnect();
 					// Log.i("DownloadTask",
-					// "doInBackground disconnect FINISHED") ;
+					// "doInBackground disconnect FINISHED");
 
 				}
 				if (mCancelled && file.exists()) {
@@ -624,6 +627,10 @@ public class FileBrowserFragment extends WifiCamFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
+		sp = getActivity().getSharedPreferences(Contants.USER_INFO,
+				Activity.MODE_PRIVATE);
+		edit = sp.edit();
+
 		View view = inflater.inflate(R.layout.browser, container, false);
 		TextView tvHeaderTitle = (TextView) view.findViewById(R.id.frag_header)
 				.findViewById(R.id.header_title);
@@ -707,12 +714,14 @@ public class FileBrowserFragment extends WifiCamFragment {
 				if (fileNode.mFormat == Format.mov) {
 					/* CarDV WiFi Support Video container is 3GP (.MOV) */
 					/* For HTTP File Streaming */
+					edit.putBoolean("isFromMain", true);
+					edit.commit();
 					intent.setDataAndType(
 							Uri.parse("http://" + mIp + fileNode.mName),
 							"video/3gp");
 					startActivity(intent);
 				} else if (fileNode.mFormat == Format.jpeg) {
-					Toast.makeText(getActivity(), "图片请下载再查看",
+					Toast.makeText(getActivity(), R.string.ntc_sav_to_sd,
 							Toast.LENGTH_SHORT).show();
 				}
 			}
@@ -756,9 +765,7 @@ public class FileBrowserFragment extends WifiCamFragment {
 	private void setWaitingState(boolean waiting) {
 
 		mFileListView.setClickable(!waiting);
-
 		if (mWaitingState != waiting) {
-
 			mWaitingState = waiting;
 			setWaitingIndicator(mWaitingState, mWaitingVisible);
 		}
@@ -768,9 +775,7 @@ public class FileBrowserFragment extends WifiCamFragment {
 
 		if (!visible)
 			return;
-
 		Activity activity = getActivity();
-
 		if (activity != null) {
 			activity.setProgressBarIndeterminate(true);
 			activity.setProgressBarIndeterminateVisibility(waiting);
@@ -778,28 +783,23 @@ public class FileBrowserFragment extends WifiCamFragment {
 	}
 
 	private void clearWaitingIndicator() {
-
 		mWaitingVisible = false;
 		setWaitingIndicator(false, true);
 	}
 
 	private void restoreWaitingIndicator() {
-
 		mWaitingVisible = true;
 		setWaitingIndicator(mWaitingState, true);
 	}
 
 	@Override
 	public void onResume() {
-
+		edit.putBoolean("isFromMain", false);
+		edit.commit();
 		restoreWaitingIndicator();
-
 		if (sDownloadTask != null) {
-
 			sDownloadTask.showProgress(getActivity());
-
 		} else {
-
 			try {
 				new DownloadFileListTask().execute(new FileBrowser(new URL(
 						"http://" + mIp + mPath), FileBrowser.COUNT_MAX));
@@ -807,19 +807,15 @@ public class FileBrowserFragment extends WifiCamFragment {
 				e.printStackTrace();
 			}
 		}
-
 		super.onResume();
 	}
 
 	@Override
 	public void onPause() {
 		clearWaitingIndicator();
-
 		if (sDownloadTask != null) {
-
 			sDownloadTask.hideProgress();
 		}
-
 		super.onPause();
 	}
 }
